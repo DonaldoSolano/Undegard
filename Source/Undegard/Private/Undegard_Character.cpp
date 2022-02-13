@@ -32,6 +32,10 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AUndegard_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AUndegard_Character::MoveRight);
+
+	PlayerInputComponent->BindAxis("LookUp", this, &AUndegard_Character::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("LookRight", this, &AUndegard_Character::AddControllerYawInput);
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AUndegard_Character::Jump);
 	PlayerInputComponent->BindAction("StopJumping", IE_Released, this, &AUndegard_Character::StopJumping);
 }
