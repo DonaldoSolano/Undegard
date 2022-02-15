@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Undegard_Character.generated.h"
 
+class UCameraComponent;
+
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
 {
@@ -23,6 +25,14 @@ protected:
 	void MoveRight(float value);
 	virtual void Jump() override;
 	virtual void StopJumping() override;
+	virtual void AddControllerPitchInput(float value) override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
+	bool bIsLookInverted;
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UCameraComponent* FPSCameraComponent;
 
 public:	
 	// Called every frame
