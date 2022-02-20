@@ -2,6 +2,7 @@
 
 
 #include "Undegard_Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
 // Sets default values
@@ -10,9 +11,20 @@ AUndegard_Character::AUndegard_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	bUseFirstPersonView = true;
+
+	FPSCameraSocketName = "SCK_Camera";
 	FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_CameraComponent"));
 	FPSCameraComponent->bUsePawnControlRotation = true;
-	FPSCameraComponent->SetupAttachment(RootComponent);
+	FPSCameraComponent->SetupAttachment(GetMesh(), FPSCameraSocketName);
+
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
+	SpringArmComponent->bUsePawnControlRotation = true;
+	SpringArmComponent->SetupAttachment(RootComponent);
+
+	TPSCameraSocketName = "TCK_Camera";
+	TPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TPS_CameraComponent"));
+	TPSCameraComponent->SetupAttachment(SpringArmComponent);
 }
 
 // Called when the game starts or when spawned
