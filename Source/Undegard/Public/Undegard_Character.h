@@ -22,14 +22,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void MoveForward(float value);
-	void MoveRight(float value);
-	virtual void Jump() override;
-	virtual void StopJumping() override;
-	virtual void AddControllerPitchInput(float value) override;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	USpringArmComponent* SpringArmComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
+	bool bIsSprinting;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	bool bIsLookInverted;
@@ -43,7 +37,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	FName TPSCameraSocketName;
 
+	void MoveForward(float value);
+	void MoveRight(float value);
+	void Sprint();
+	virtual void Jump() override;
+	virtual void StopJumping() override;
+	virtual void AddControllerPitchInput(float value) override;
+
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USpringArmComponent* SpringArmComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent* FPSCameraComponent;
 

@@ -13,6 +13,8 @@ AUndegard_Character::AUndegard_Character()
 
 	bUseFirstPersonView = true;
 
+	bIsSprinting = false;
+
 	FPSCameraSocketName = "SCK_Camera";
 	FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_CameraComponent"));
 	FPSCameraComponent->bUsePawnControlRotation = true;
@@ -54,6 +56,8 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AUndegard_Character::Jump);
 	PlayerInputComponent->BindAction("StopJumping", IE_Released, this, &AUndegard_Character::StopJumping);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AUndegard_Character::Sprint);
 }
 
 void AUndegard_Character::MoveForward(float value) {
@@ -61,6 +65,11 @@ void AUndegard_Character::MoveForward(float value) {
 }
 void AUndegard_Character::MoveRight(float value) {
 	AddMovementInput(GetActorRightVector() * value);
+}
+
+void AUndegard_Character::Sprint()
+{
+	bIsSprinting = !bIsSprinting;
 }
 
 void AUndegard_Character::Jump()
