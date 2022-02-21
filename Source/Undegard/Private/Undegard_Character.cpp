@@ -61,10 +61,10 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 }
 
 void AUndegard_Character::MoveForward(float value) {
-	AddMovementInput(GetActorForwardVector() * value);
+	AddMovementInput(GetActorForwardVector()*value);
 }
 void AUndegard_Character::MoveRight(float value) {
-	AddMovementInput(GetActorRightVector() * value);
+	AddMovementInput(GetActorRightVector()*value);
 }
 
 void AUndegard_Character::Sprint()
