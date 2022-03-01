@@ -8,31 +8,47 @@
 
 class USceneComponent;
 class UStaticMeshComponent;
+class UBoxComponent;
+class AUndegard_Character;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Door : public AActor
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USceneComponent* CustomRootComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UStaticMeshComponent* DoorFrameComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UStaticMeshComponent* DoorComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UBoxComponent* KeyZoneColliderComponent;
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Door")
+	float openAngle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Door")
+	bool bIsOpen;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Door")
+	FName DoorTag;
+
 public:	
 	// Sets default values for this actor's properties
 	AUndegard_Door();
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USceneComponent* CustomRootComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* DoorFrameComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* DoorComponent;
-
-	UPROPERTY(EditAnywhere, Category = "Door")
-	float openAngle;
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void CheckKeyFromPlayer(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
 
 public:	
 	// Called every frame

@@ -22,6 +22,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void MoveForward(float value);
+	void MoveRight(float value);
+	void Sprint();
+	virtual void Jump() override;
+	virtual void StopJumping() override;
+	virtual void AddControllerPitchInput(float value) override;
+
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	bool bIsSprinting;
 
@@ -37,14 +45,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	FName TPSCameraSocketName;
 
-	void MoveForward(float value);
-	void MoveRight(float value);
-	void Sprint();
-	virtual void Jump() override;
-	virtual void StopJumping() override;
-	virtual void AddControllerPitchInput(float value) override;
-
-protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
 
@@ -54,11 +54,18 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCameraComponent* TPSCameraComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Key")
+	TArray<FName> DoorKeys;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void AddKey(FName NewKey);
+
+	bool HasKey(FName KeyTag);
 
 };
