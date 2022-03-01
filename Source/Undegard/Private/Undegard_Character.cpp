@@ -60,6 +60,16 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AUndegard_Character::Sprint);
 }
 
+void AUndegard_Character::AddKey(FName NewKey)
+{
+	DoorKeys.Add(NewKey);
+}
+
+bool AUndegard_Character::HasKey(FName KeyTag)
+{
+	return DoorKeys.Contains(KeyTag);
+}
+
 void AUndegard_Character::MoveForward(float value) {
 	AddMovementInput(GetActorForwardVector()*value);
 }
