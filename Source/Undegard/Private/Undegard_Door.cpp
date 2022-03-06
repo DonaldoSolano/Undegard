@@ -42,6 +42,10 @@ void AUndegard_Door::BeginPlay()
 
 void AUndegard_Door::CheckKeyFromPlayer(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	if (bIsOpen)
+	{
+		return;
+	}
 	if (IsValid(OtherActor))
 	{
 		AUndegard_Character* OverlappedCharacter = Cast<AUndegard_Character>(OtherActor);
@@ -64,7 +68,11 @@ void AUndegard_Door::Tick(float DeltaTime)
 
 void AUndegard_Door::OpenDoor()
 {
-	FRotator newRotation = FRotator(0.0f, openAngle, 0.0f);
-	DoorComponent->SetRelativeRotation(newRotation);
+	/*FRotator newRotation = FRotator(0.0f, openAngle, 0.0f);
+	DoorComponent->SetRelativeRotation(newRotation);*/
+
+	bIsOpen = true;
+
+	BP_OpenDoor();
 }
 
