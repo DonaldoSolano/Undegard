@@ -30,7 +30,7 @@ protected:
 	UBoxComponent* KeyZoneColliderComponent;
 
 protected:
-	UPROPERTY(EditAnywhere, Category = "Door")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Door")
 	float openAngle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Door")
@@ -49,6 +49,9 @@ protected:
 
 	UFUNCTION()
 	void CheckKeyFromPlayer(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Door")
+	void BP_OpenDoor();
 
 public:	
 	// Called every frame
