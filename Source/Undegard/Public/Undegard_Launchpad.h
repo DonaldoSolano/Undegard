@@ -10,6 +10,7 @@ class USceneComponent;
 class UStaticMeshComponent;
 class UBoxComponent;
 class AUndegard_Character;
+class UMaterialInstanceDynamic;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Launchpad : public AActor
@@ -30,11 +31,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UBoxComponent* LaunchpadColliderComponent;
 
+	UMaterialInstanceDynamic* LaunchpadColorMaterial;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Launchpad")
 	float throwForce;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Launchpad")
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Launchpad")
 	bool bIsLaunchpadActivated;
 
 protected:
@@ -52,4 +56,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void ThrowPlayer(AUndegard_Character* OverlappedCharacter);
+
+	UFUNCTION(BlueprintCallable, Category = "Launchpad")
+	void ChangeLaunchpadColor();
 };
