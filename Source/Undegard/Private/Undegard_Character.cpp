@@ -4,6 +4,7 @@
 #include "Undegard_Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Undegard_Weapon.h"
 
 // Sets default values
 AUndegard_Character::AUndegard_Character()
@@ -33,7 +34,7 @@ AUndegard_Character::AUndegard_Character()
 void AUndegard_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CreateInitialWeapon();
 }
 
 // Called every frame
@@ -58,6 +59,9 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("StopJumping", IE_Released, this, &AUndegard_Character::StopJumping);
 
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AUndegard_Character::Sprint);
+
+	PlayerInputComponent->BindAction("WeaponAction", IE_Pressed, this, &AUndegard_Character::StartWeaponAction);
+	PlayerInputComponent->BindAction("WeaponAction", IE_Released, this, &AUndegard_Character::StopWeaponAction);
 }
 
 void AUndegard_Character::AddKey(FName NewKey)
@@ -90,6 +94,35 @@ void AUndegard_Character::Jump()
 void AUndegard_Character::StopJumping()
 {
 	Super::StopJumping();
+}
+
+void AUndegard_Character::StartWeaponAction()
+{
+	if (IsValid(CurrentWeapon))
+	{
+		CurrentWeapon->StartAction();
+	}
+}
+
+void AUndegard_Character::StopWeaponAction()
+{
+	if (IsValid(CurrentWeapon))
+	{
+		CurrentWeapon->StopAction();
+	}
+}
+
+void AUndegard_Character::CreateInitialWeapon()
+{
+	if (IsValid(InitialWeaponClass))
+	{
+		CurrentWeapon = GetWorld()->SpawnActor<AUndegard_Weapon>(InitialWeaponClass, GetActorLocation(), GetActorRotation());
+
+		if (IsValid(CurrentWeapon))
+		{
+			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		}
+	}
 }
 
 void AUndegard_Character::AddControllerPitchInput(float value)

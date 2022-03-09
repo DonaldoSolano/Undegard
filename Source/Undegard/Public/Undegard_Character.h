@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class AUndegard_Weapon;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
@@ -27,6 +28,9 @@ protected:
 	void Sprint();
 	virtual void Jump() override;
 	virtual void StopJumping() override;
+	void StartWeaponAction();
+	void StopWeaponAction();
+	void CreateInitialWeapon();
 	virtual void AddControllerPitchInput(float value) override;
 
 protected:
@@ -56,6 +60,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Key")
 	TArray<FName> DoorKeys;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<AUndegard_Weapon> InitialWeaponClass;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
+	AUndegard_Weapon* CurrentWeapon;
 
 public:	
 	// Called every frame
