@@ -13,9 +13,19 @@ UCLASS()
 class UNDEGARD_API AUndegard_Rifle : public AUndegard_Weapon
 {
 	GENERATED_BODY()
+
+public:
+	AUndegard_Rifle();
 	
 protected:
 	virtual void StartAction() override;
 	
 	virtual	void StopAction() override;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "LineTrace")
+	float TraceLenght;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "LineTrace|Debug")
+	bool bDrawLineTrace;
 };
