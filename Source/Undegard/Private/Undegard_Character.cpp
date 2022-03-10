@@ -120,6 +120,7 @@ void AUndegard_Character::CreateInitialWeapon()
 
 		if (IsValid(CurrentWeapon))
 		{
+			CurrentWeapon->SetOwner(this);
 			CurrentWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		}
 	}
@@ -128,6 +129,21 @@ void AUndegard_Character::CreateInitialWeapon()
 void AUndegard_Character::AddControllerPitchInput(float value)
 {
 	Super::AddControllerPitchInput(bIsLookInverted?-value:value);
+}
+
+FVector AUndegard_Character::GetPawnViewLocation() const
+{
+	if (IsValid(FPSCameraComponent) && bUseFirstPersonView)
+	{
+		return FPSCameraComponent->GetComponentLocation();
+	}
+
+	if (IsValid(TPSCameraComponent) && !bUseFirstPersonView)
+	{
+		return TPSCameraComponent->GetComponentLocation();
+	}
+
+	return Super::GetPawnViewLocation();
 }
 
 
