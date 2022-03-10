@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Undegard_Weapon.generated.h"
 
+class UDamageType;
+
 UCLASS()
 class UNDEGARD_API AUndegard_Weapon : public AActor
 {
@@ -24,6 +26,13 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Weapon")
 	void BP_StopAction();
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	float Damage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	TSubclassOf<UDamageType> DamageType;
 
 public:	
 	// Called every frame
