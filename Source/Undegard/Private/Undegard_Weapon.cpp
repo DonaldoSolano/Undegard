@@ -2,6 +2,7 @@
 
 
 #include "Undegard_Weapon.h"
+#include "GameFramework/Character.h"
 
 // Sets default values
 AUndegard_Weapon::AUndegard_Weapon()
@@ -33,5 +34,14 @@ void AUndegard_Weapon::StartAction()
 void AUndegard_Weapon::StopAction()
 {
 	BP_StopAction();
+}
+
+void AUndegard_Weapon::SetCharacterOwner(ACharacter * NewOwner)
+{
+	if (IsValid(NewOwner))
+	{
+		SetOwner(NewOwner);
+		CurrentOwnerCharacter = NewOwner;
+	}
 }
 

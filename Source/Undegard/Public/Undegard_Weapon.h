@@ -7,6 +7,7 @@
 #include "Undegard_Weapon.generated.h"
 
 class UDamageType;
+class ACharacter;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Weapon : public AActor
@@ -34,6 +35,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<UDamageType> DamageType;
 
+	ACharacter* CurrentOwnerCharacter;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -43,4 +46,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void StopAction();
+
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterOwner(ACharacter* NewOwner);
 };
