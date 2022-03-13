@@ -44,4 +44,11 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
 	FName TraceParamName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Timers")
+	FTimerHandle MemberTimerHandle;
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Shoot Mode")
+	bool bIsAutomaticShootActivated;
 };

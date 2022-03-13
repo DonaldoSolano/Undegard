@@ -15,11 +15,21 @@ AUndegard_Rifle::AUndegard_Rifle()
 	PrimaryActorTick.bCanEverTick = true;
 	TraceLenght = 10000.0f;
 	MuzzleSocketName = "SCK_Muzzle";
+	bIsAutomaticShootActivated = true;
 }
 
 void AUndegard_Rifle::StartAction()
 {
 	Super::StartAction();
+
+	if (bIsAutomaticShootActivated)
+	{
+		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AUndegard_Rifle::StartAction, 1.0f, true, 0.1f);
+	}
+	else if (bIsAutomaticShootActivated == false)
+	{
+		GetWorldTimerManager().ClearTimer(MemberTimerHandle);
+	}
 
 	AActor* CurrentOwner = GetOwner();
 
@@ -90,13 +100,18 @@ void AUndegard_Rifle::StartAction()
 				}
 			}
 		}
+		
 	}
 }
 
 void AUndegard_Rifle::StopAction()
 {
 	Super::StopAction();
-	
+
+	if (bIsAutomaticShootActivated)
+	{
+		GetWorldTimerManager().ClearTimer(MemberTimerHandle);
+	}
 }
 
 //UE_LOG(LogTemp, Log, TEXT("Player stops action!"));
