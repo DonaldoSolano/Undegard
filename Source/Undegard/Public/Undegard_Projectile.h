@@ -30,9 +30,16 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	FVector ProjectileLocationAtCollision;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void CheckIfProjectileCollided(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
 
 public:	
 	// Called every frame

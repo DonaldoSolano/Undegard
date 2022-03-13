@@ -16,6 +16,10 @@ AUndegard_Projectile::AUndegard_Projectile()
 	ProjectileCollision = CreateDefaultSubobject<USphereComponent>(TEXT("ProjectileCollision"));
 	RootComponent = ProjectileCollision;
 
+	ProjectileCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	ProjectileCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
+	ProjectileCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	ProjectileMesh->SetupAttachment(ProjectileCollision);
 
@@ -28,6 +32,16 @@ AUndegard_Projectile::AUndegard_Projectile()
 void AUndegard_Projectile::BeginPlay()
 {
 	Super::BeginPlay();
+	ProjectileCollision->OnComponentHit.AddDynamic(this, &AUndegard_Projectile::CheckIfProjectileCollided);
+}
+
+void AUndegard_Projectile::CheckIfProjectileCollided(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{
+	AActor* HitActor = Hit.GetActor();
+	if (IsValid(HitActor))
+	{
+		ProjectileLocationAtCollision = Hit.Location;
+	}
 	
 }
 
