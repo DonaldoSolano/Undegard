@@ -9,6 +9,7 @@
 class UCameraComponent;
 class USpringArmComponent;
 class AUndegard_Weapon;
+class AUndegard_Rifle;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
@@ -30,6 +31,7 @@ protected:
 	virtual void StopJumping() override;
 	void StartWeaponAction();
 	void StopWeaponAction();
+	void SwitchWeaponMode();
 	void CreateInitialWeapon();
 	virtual void AddControllerPitchInput(float value) override;
 
@@ -79,5 +81,8 @@ public:
 	void AddKey(FName NewKey);
 
 	bool HasKey(FName KeyTag);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Visual Character Debug|Debug")
+	void BP_CharacterActionDebug();
 
 };

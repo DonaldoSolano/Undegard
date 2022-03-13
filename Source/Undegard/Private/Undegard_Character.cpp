@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Undegard_Weapon.h"
+#include "Undegard_Rifle.h"
 
 // Sets default values
 AUndegard_Character::AUndegard_Character()
@@ -61,7 +62,10 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &AUndegard_Character::Sprint);
 
 	PlayerInputComponent->BindAction("WeaponAction", IE_Pressed, this, &AUndegard_Character::StartWeaponAction);
+
 	PlayerInputComponent->BindAction("WeaponAction", IE_Released, this, &AUndegard_Character::StopWeaponAction);
+
+	PlayerInputComponent->BindAction("SwitchRifleMode", IE_Pressed, this, &AUndegard_Character::SwitchWeaponMode);
 }
 
 void AUndegard_Character::AddKey(FName NewKey)
@@ -109,6 +113,19 @@ void AUndegard_Character::StopWeaponAction()
 	if (IsValid(CurrentWeapon))
 	{
 		CurrentWeapon->StopAction();
+	}
+}
+
+void AUndegard_Character::SwitchWeaponMode()
+{
+	if (IsValid(CurrentWeapon))
+	{
+		AUndegard_Rifle* RifleWeaponReference = Cast<AUndegard_Rifle>(CurrentWeapon);
+		if (IsValid(RifleWeaponReference))
+		{
+			BP_CharacterActionDebug();
+			RifleWeaponReference->bIsAutomaticShootActivated = !RifleWeaponReference->bIsAutomaticShootActivated;
+		}
 	}
 }
 
