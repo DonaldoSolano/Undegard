@@ -21,6 +21,15 @@ void AUndegard_Launcher::StartAction()
 
 	if (IsValid(CurrentOwnerCharacter))
 	{
+		/*FVector EyeLocation;
+
+		FRotator EyeRotation;
+
+		CurrentOwnerCharacter->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+
+		FVector ShotDirection = EyeRotation.Vector();
+		FVector TraceEnd = EyeLocation + (ShotDirection * TraceLenght);*/
+
 		USkeletalMeshComponent* CharacterMeshComponent = CurrentOwnerCharacter->GetMesh();
 
 		if (IsValid(CharacterMeshComponent))
@@ -30,7 +39,19 @@ void AUndegard_Launcher::StartAction()
 			FRotator MuzzleSocketRotation = CharacterMeshComponent->GetSocketRotation(MuzzleSocketName);
 			
 			AUndegard_Projectile* CurrentProjectile = GetWorld()->SpawnActor<AUndegard_Projectile>(ProjectileClass, MuzzleSocketLocation, MuzzleSocketRotation);
+
+			if (IsValid(CurrentProjectile))
+			{
+				
+				if (bDrawLineTrace)
+				{
+					DrawDebugSphere(GetWorld(), CurrentProjectile->ProjectileLocationAtCollision, 200, 26, FColor::Red,true,-1,0,2);
+					UE_LOG(LogTemp, Log, TEXT("Debugging Sphere"));
+				}
+			}
 		}
+
+		
 	}
 }
 

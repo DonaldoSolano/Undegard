@@ -27,4 +27,7 @@ protected:
 	virtual void StartAction() override;
 
 	virtual	void StopAction() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "LineTrace|Debug")
+	bool bDrawLineTrace;
 };
