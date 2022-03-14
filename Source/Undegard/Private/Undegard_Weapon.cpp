@@ -16,7 +16,6 @@ AUndegard_Weapon::AUndegard_Weapon()
 void AUndegard_Weapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
