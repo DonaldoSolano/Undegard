@@ -10,6 +10,8 @@ class UCameraComponent;
 class USpringArmComponent;
 class AUndegard_Weapon;
 class AUndegard_Rifle;
+class UAnimMontage;
+class UAnimInstance;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
@@ -24,15 +26,24 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void InitializeReferences();
+
 	void MoveForward(float value);
 	void MoveRight(float value);
 	void Sprint();
 	virtual void Jump() override;
 	virtual void StopJumping() override;
+
 	void StartWeaponAction();
 	void StopWeaponAction();
+
 	void SwitchWeaponMode();
+
 	void CreateInitialWeapon();
+
+	void StartMelee();
+	void StopMelee();
+
 	virtual void AddControllerPitchInput(float value) override;
 
 protected:
@@ -68,6 +79,11 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
 	AUndegard_Weapon* CurrentWeapon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
+	UAnimMontage* MeleeMontage;
+
+	UAnimInstance* AnimInstance;
 
 public:	
 	// Called every frame

@@ -3,6 +3,9 @@
 
 #include "Undegard_Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimMontage.h"
+#include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Undegard_Weapon.h"
 #include "Undegard_Rifle.h"
@@ -36,13 +39,21 @@ void AUndegard_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	CreateInitialWeapon();
+	InitializeReferences();
+}
+
+void AUndegard_Character::InitializeReferences()
+{
+	if (IsValid(GetMesh()))
+	{
+		AnimInstance = GetMesh()->GetAnimInstance();
+	}
 }
 
 // Called every frame
 void AUndegard_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -66,6 +77,24 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("WeaponAction", IE_Released, this, &AUndegard_Character::StopWeaponAction);
 
 	PlayerInputComponent->BindAction("SwitchRifleMode", IE_Pressed, this, &AUndegard_Character::SwitchWeaponMode);
+
+	PlayerInputComponent->BindAction("Melee", IE_Pressed, this, &AUndegard_Character::StartMelee);
+	PlayerInputComponent->BindAction("Melee", IE_Released, this, &AUndegard_Character::StopMelee);
+}
+
+void AUndegard_Character::StartMelee()
+{
+	if (IsValid(AnimInstance) && IsValid(MeleeMontage))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player starts melee action"));
+		AnimInstance->Montage_Play(MeleeMontage);
+	}
+
+}
+
+void AUndegard_Character::StopMelee() 
+{
+	UE_LOG(LogTemp, Warning, TEXT("Player stops melee action"));
 }
 
 void AUndegard_Character::AddKey(FName NewKey)
