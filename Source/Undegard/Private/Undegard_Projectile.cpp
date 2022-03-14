@@ -5,7 +5,10 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-
+#include "DrawDebugHelpers.h"
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h"
+#include "GameFramework\Controller.h"
 
 // Sets default values
 AUndegard_Projectile::AUndegard_Projectile()
@@ -15,10 +18,6 @@ AUndegard_Projectile::AUndegard_Projectile()
 
 	ProjectileCollision = CreateDefaultSubobject<USphereComponent>(TEXT("ProjectileCollision"));
 	RootComponent = ProjectileCollision;
-
-	ProjectileCollision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	ProjectileCollision->SetCollisionResponseToAllChannels(ECR_Ignore);
-	ProjectileCollision->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
 	ProjectileMesh->SetupAttachment(ProjectileCollision);
@@ -35,12 +34,28 @@ void AUndegard_Projectile::BeginPlay()
 	ProjectileCollision->OnComponentHit.AddDynamic(this, &AUndegard_Projectile::CheckIfProjectileCollided);
 }
 
-void AUndegard_Projectile::CheckIfProjectileCollided(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+void AUndegard_Projectile::ExplodeGrenade()
 {
-	AActor* HitActor = Hit.GetActor();
+	// Make damage
 	if (IsValid(HitActor))
 	{
-		ProjectileLocationAtCollision = Hit.Location;
+		//If the argument of the method is preceeded with an 'const &...' it means that it is not a outgoing argument but just an indication 
+		//for the compiler to work with the original argument content and don't work with a duplicate of it. 
+		UE_LOG(LogTemp, Log, TEXT("Collision center equals: %f"), ProjectileDamage);
+		UGameplayStatics::ApplyRadialDamage(GetWorld(),ProjectileDamage, ProjectileLocationAtCollision, 100.0f, ProjectileDamageType, ActorsIgnoredOnExplotion, this, ControllerInstigator);
+	}
+	DrawDebugSphere(GetWorld(), ProjectileLocationAtCollision, 100.0f, 26, FColor::Red, true, -1, 0, 2);
+	Destroy();
+}
+
+void AUndegard_Projectile::CheckIfProjectileCollided(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+{
+	if (IsValid(OtherActor))
+	{
+		ProjectileLocationAtCollision = Hit.ImpactPoint;
+		HitActor = Hit.GetActor();
+		ProjectileHitResult = Hit;
+		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &AUndegard_Projectile::ExplodeGrenade, 1.0f, false, 3.0f);
 	}
 	
 }
@@ -49,6 +64,5 @@ void AUndegard_Projectile::CheckIfProjectileCollided(UPrimitiveComponent * HitCo
 void AUndegard_Projectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 

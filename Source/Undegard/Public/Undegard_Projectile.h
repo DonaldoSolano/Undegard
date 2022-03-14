@@ -9,6 +9,7 @@
 class UStaticMeshComponent;
 class UProjectileMovementComponent;
 class USphereComponent;
+class AController;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Projectile : public AActor
@@ -34,12 +35,40 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
 	FVector ProjectileLocationAtCollision;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	float ProjectileDamage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	AActor* HitActor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	FVector ShotDirection;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	FHitResult ProjectileHitResult;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	AController* ControllerInstigator;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	TSubclassOf <UDamageType> ProjectileDamageType;
+	
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Timers")
+	FTimerHandle MemberTimerHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Projectile data")
+	TArray <AActor*> ActorsIgnoredOnExplotion;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void ExplodeGrenade();
+
 	UFUNCTION()
-	void CheckIfProjectileCollided(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
+	void CheckIfProjectileCollided(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit);
 
 public:	
 	// Called every frame
