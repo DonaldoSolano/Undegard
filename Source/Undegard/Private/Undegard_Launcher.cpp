@@ -5,8 +5,6 @@
 #include "Undegard_Projectile.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
-#include "DrawDebugHelpers.h"
 #include "Particles/ParticleSystem.h"
 #include "Particles/ParticleSystemComponent.h"
 
@@ -19,16 +17,23 @@ void AUndegard_Launcher::StartAction()
 {
 	Super::StartAction();
 
-	if (IsValid(CurrentOwnerCharacter))
+	AActor* CurrentOwner = GetOwner();
+
+	if (IsValid(CurrentOwner))
 	{
-		/*FVector EyeLocation;
+		FVector EyeLocation;
 
 		FRotator EyeRotation;
 
-		CurrentOwnerCharacter->GetActorEyesViewPoint(EyeLocation, EyeRotation);
+		//For this method remember that the & sign in the description of the arguments indicates that the variables passed as arguments are empty and the method will
+		//return info into them respectively. And the variable type before the method description indicate the type of variable of the information the method returns.
+		CurrentOwner->GetActorEyesViewPoint(EyeLocation, EyeRotation);
 
 		FVector ShotDirection = EyeRotation.Vector();
-		FVector TraceEnd = EyeLocation + (ShotDirection * TraceLenght);*/
+
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+		QueryParams.AddIgnoredActor(CurrentOwner);
 
 		USkeletalMeshComponent* CharacterMeshComponent = CurrentOwnerCharacter->GetMesh();
 
@@ -40,18 +45,11 @@ void AUndegard_Launcher::StartAction()
 			
 			AUndegard_Projectile* CurrentProjectile = GetWorld()->SpawnActor<AUndegard_Projectile>(ProjectileClass, MuzzleSocketLocation, MuzzleSocketRotation);
 
-			if (IsValid(CurrentProjectile))
-			{
-				
-				if (bDrawLineTrace)
-				{
-					DrawDebugSphere(GetWorld(), CurrentProjectile->ProjectileLocationAtCollision, 200, 26, FColor::Red,true,-1,0,2);
-					UE_LOG(LogTemp, Log, TEXT("Debugging Sphere"));
-				}
-			}
+			CurrentProjectile->ProjectileDamage = Damage;
+			CurrentProjectile->ShotDirection = ShotDirection;
+			CurrentProjectile->ControllerInstigator = CurrentOwner->GetInstigatorController();
+			CurrentProjectile->ProjectileDamageType = DamageType;
 		}
-
-		
 	}
 }
 
