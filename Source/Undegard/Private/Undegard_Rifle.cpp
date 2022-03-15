@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Undegard/Undegard.h"
 #include "Undegard_Rifle.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
@@ -54,7 +54,7 @@ void AUndegard_Rifle::StartAction()
 		FVector TraceEndPoint = TraceEnd;
 
 		FHitResult HitResult;
-		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, EyeLocation, TraceEnd, ECC_Visibility, QueryParams);
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, EyeLocation, TraceEnd, COLLISION_WEAPON, QueryParams);
 
 		if (bHit)
 		{
