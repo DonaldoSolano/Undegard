@@ -1,9 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Undegard/Undegard.h"
 #include "Undegard_Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Animation/AnimMontage.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -32,6 +33,12 @@ AUndegard_Character::AUndegard_Character()
 	TPSCameraSocketName = "TCK_Camera";
 	TPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("TPS_CameraComponent"));
 	TPSCameraComponent->SetupAttachment(SpringArmComponent);
+
+	MeleeSocketName = "SCK_Melee";
+	MeleeDetectorComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("MeleeDetectorComponent"));
+	MeleeDetectorComponent->SetupAttachment(GetMesh(), MeleeSocketName);
+	MeleeDetectorComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	MeleeDetectorComponent->SetCollisionResponseToChannel(COLLISION_ENEMY, ECR_Overlap);
 }
 
 // Called when the game starts or when spawned

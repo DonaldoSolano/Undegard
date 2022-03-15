@@ -12,6 +12,7 @@ class AUndegard_Weapon;
 class AUndegard_Rifle;
 class UAnimMontage;
 class UAnimInstance;
+class UCapsuleComponent;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
@@ -56,11 +57,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	bool bUseFirstPersonView;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	FName FPSCameraSocketName;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	FName TPSCameraSocketName;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Melee")
+	FName MeleeSocketName;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
@@ -84,6 +88,9 @@ protected:
 	UAnimMontage* MeleeMontage;
 
 	UAnimInstance* AnimInstance;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UCapsuleComponent* MeleeDetectorComponent;
 
 public:	
 	// Called every frame
