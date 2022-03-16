@@ -57,6 +57,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	bool bUseFirstPersonView;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
+	float MeleeDamage;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Melee")
+	bool bIsDoingMelee;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
+	bool bCanCharacterUseWeapon;
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	FName FPSCameraSocketName;
 
@@ -105,7 +114,13 @@ public:
 
 	bool HasKey(FName KeyTag);
 
+	void SetActionsState(bool NewState);
+
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Visual Character Debug|Debug")
 	void BP_CharacterActionDebug();
 
+	void SetMeleeDetectorCollision(ECollisionEnabled::Type NewCollisionState);
+
+	UFUNCTION()
+	void MakeMeleeDamage(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 };

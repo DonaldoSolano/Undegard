@@ -3,6 +3,7 @@
 #include "Undegard/Undegard.h"
 #include "Undegard_Character.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Animation/AnimMontage.h"
@@ -39,6 +40,9 @@ AUndegard_Character::AUndegard_Character()
 	MeleeDetectorComponent->SetupAttachment(GetMesh(), MeleeSocketName);
 	MeleeDetectorComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	MeleeDetectorComponent->SetCollisionResponseToChannel(COLLISION_ENEMY, ECR_Overlap);
+	MeleeDetectorComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	MeleeDamage = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -47,6 +51,7 @@ void AUndegard_Character::BeginPlay()
 	Super::BeginPlay();
 	CreateInitialWeapon();
 	InitializeReferences();
+	MeleeDetectorComponent->OnComponentBeginOverlap.AddDynamic(this,&AUndegard_Character::MakeMeleeDamage);
 }
 
 void AUndegard_Character::InitializeReferences()
@@ -91,12 +96,16 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 void AUndegard_Character::StartMelee()
 {
+	if (bIsDoingMelee)
+	{
+		return;
+	}
 	if (IsValid(AnimInstance) && IsValid(MeleeMontage))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player starts melee action"));
 		AnimInstance->Montage_Play(MeleeMontage);
 	}
-
+	SetActionsState(true);
 }
 
 void AUndegard_Character::StopMelee() 
@@ -112,6 +121,26 @@ void AUndegard_Character::AddKey(FName NewKey)
 bool AUndegard_Character::HasKey(FName KeyTag)
 {
 	return DoorKeys.Contains(KeyTag);
+}
+
+void AUndegard_Character::SetActionsState(bool NewState)
+{
+	bIsDoingMelee = NewState;
+	bCanCharacterUseWeapon = !NewState;
+}
+
+void AUndegard_Character::SetMeleeDetectorCollision(ECollisionEnabled::Type NewCollisionState)
+{
+	MeleeDetectorComponent->SetCollisionEnabled(NewCollisionState);
+}
+
+void AUndegard_Character::MakeMeleeDamage(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	if (IsValid(OtherActor))
+	{
+		//const FHitResult & SweepResult in this case works as an argument we can retrieve info from because of the const + &.
+		UGameplayStatics::ApplyPointDamage(OtherActor, MeleeDamage, SweepResult.Location, SweepResult, GetInstigatorController(),this, nullptr);
+	}
 }
 
 void AUndegard_Character::MoveForward(float value) {
@@ -138,7 +167,12 @@ void AUndegard_Character::StopJumping()
 
 void AUndegard_Character::StartWeaponAction()
 {
-	if (IsValid(CurrentWeapon))
+	if (!bCanCharacterUseWeapon)
+	{
+		return;
+	}
+
+	if (IsValid(CurrentWeapon) && bIsDoingMelee == false)
 	{
 		CurrentWeapon->StartAction();
 	}
@@ -146,6 +180,11 @@ void AUndegard_Character::StartWeaponAction()
 
 void AUndegard_Character::StopWeaponAction()
 {
+	if (!bCanCharacterUseWeapon)
+	{
+		return;
+	}
+
 	if (IsValid(CurrentWeapon))
 	{
 		CurrentWeapon->StopAction();
