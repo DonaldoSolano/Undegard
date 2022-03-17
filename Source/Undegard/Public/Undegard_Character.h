@@ -57,14 +57,26 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	bool bUseFirstPersonView;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
-	float MeleeDamage;
-
 	UPROPERTY(BlueprintReadOnly, Category = "Melee")
 	bool bIsDoingMelee;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Weapon")
 	bool bCanCharacterUseWeapon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
+	bool bCanMakeCombos;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Melee")
+	bool bIsComboEnabled;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
+	float MeleeDamage;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee", meta = (EditCondition = bCanMakeCombos, ClampMin = 1.0, UIMin = 1.0))
+	float MaxComboMultiplier;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Melee" , meta = (EditCondition = bCanMakeCombos, ClampMin = 1.0, UIMin = 1.0))
+	float CurrentComboMultiplier;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Aiming")
 	FName FPSCameraSocketName;
@@ -123,4 +135,10 @@ public:
 
 	UFUNCTION()
 	void MakeMeleeDamage(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION(BlueprintCallable)
+	void SetComboEnabled(bool NewState);
+
+	UFUNCTION(BlueprintCallable)
+	void ResetCombo();
 };

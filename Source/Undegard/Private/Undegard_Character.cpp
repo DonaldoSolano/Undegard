@@ -22,6 +22,10 @@ AUndegard_Character::AUndegard_Character()
 
 	bIsSprinting = false;
 
+	MaxComboMultiplier = 4.0f;
+
+	CurrentComboMultiplier = 1.0f;
+
 	FPSCameraSocketName = "SCK_Camera";
 	FPSCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FPS_CameraComponent"));
 	FPSCameraComponent->bUsePawnControlRotation = true;
@@ -96,10 +100,30 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 void AUndegard_Character::StartMelee()
 {
-	if (bIsDoingMelee)
+	if (bIsDoingMelee && !bCanMakeCombos)
 	{
 		return;
 	}
+
+	if (bCanMakeCombos)
+	{
+		if (bIsDoingMelee)
+		{
+			if (bIsComboEnabled)
+			{
+				if (CurrentComboMultiplier < MaxComboMultiplier)
+				{
+					CurrentComboMultiplier++;
+					SetComboEnabled(false);
+				}
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+
 	if (IsValid(AnimInstance) && IsValid(MeleeMontage))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Player starts melee action"));
@@ -139,8 +163,19 @@ void AUndegard_Character::MakeMeleeDamage(UPrimitiveComponent * OverlappedCompon
 	if (IsValid(OtherActor))
 	{
 		//const FHitResult & SweepResult in this case works as an argument we can retrieve info from because of the const + &.
-		UGameplayStatics::ApplyPointDamage(OtherActor, MeleeDamage, SweepResult.Location, SweepResult, GetInstigatorController(),this, nullptr);
+		UGameplayStatics::ApplyPointDamage(OtherActor, MeleeDamage * CurrentComboMultiplier, SweepResult.Location, SweepResult, GetInstigatorController(),this, nullptr);
 	}
+}
+
+void AUndegard_Character::SetComboEnabled(bool NewState)
+{
+	bIsComboEnabled = NewState;
+}
+
+void AUndegard_Character::ResetCombo()
+{
+	SetComboEnabled(false);
+	CurrentComboMultiplier = 1.0f;
 }
 
 void AUndegard_Character::MoveForward(float value) {
