@@ -13,6 +13,7 @@ class AUndegard_Rifle;
 class UAnimMontage;
 class UAnimInstance;
 class UCapsuleComponent;
+class UUndegard_HealthComponent;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
@@ -112,6 +113,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UCapsuleComponent* MeleeDetectorComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UUndegard_HealthComponent* HealthComponent;
 
 public:	
 	// Called every frame

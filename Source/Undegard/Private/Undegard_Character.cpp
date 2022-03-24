@@ -11,6 +11,7 @@
 #include "Camera/CameraComponent.h"
 #include "Undegard_Weapon.h"
 #include "Undegard_Rifle.h"
+#include "Character/Components/Undegard_HealthComponent.h"
 
 // Sets default values
 AUndegard_Character::AUndegard_Character()
@@ -47,6 +48,8 @@ AUndegard_Character::AUndegard_Character()
 	MeleeDetectorComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	MeleeDamage = 10.0f;
+
+	HealthComponent = CreateDefaultSubobject<UUndegard_HealthComponent>(TEXT("HealthComponent"));
 }
 
 // Called when the game starts or when spawned
