@@ -7,6 +7,7 @@
 #include "Undegard_GameMode.generated.h"
 
 class AUndegard_Character;
+class AUndegard_SpectatingCamera;
 /**
  * 
  */
@@ -15,16 +16,33 @@ class UNDEGARD_API AUndegard_GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Spectating Camera")
+	AUndegard_SpectatingCamera* VictoryCamera;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Spectating Camera")
+	AUndegard_SpectatingCamera* GameOverCamera;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Spectating Camera")
+	float SpectatingBlendTime;
+
 public:
 	UFUNCTION()
 	void Victory(AUndegard_Character* Character);
 
 	UFUNCTION()
-	void GameOver();
+	void GameOver(AUndegard_Character* Character);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_Victory(AUndegard_Character* Character);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void BP_GameOver();
+	void BP_GameOver(AUndegard_Character* Character);
+
+protected:
+	virtual void BeginPlay() override;
+
+	void SetUpSpectatingCameras();
+
+	void MoveCameraToSpectatingPoint(AUndegard_SpectatingCamera* SpectatingCamera, AUndegard_Character* Character);
 };
