@@ -14,6 +14,7 @@ class UAnimMontage;
 class UAnimInstance;
 class UCapsuleComponent;
 class UUndegard_HealthComponent;
+class AUndegard_GameMode;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
@@ -70,6 +71,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Melee")
 	bool bIsComboEnabled;
 
+	UPROPERTY( EditDefaultsOnly,BlueprintReadOnly, Category = "Game Over")
+	bool bHasToDestroy;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
 	float MeleeDamage;
 	
@@ -117,6 +121,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UUndegard_HealthComponent* HealthComponent;
 
+	AUndegard_GameMode* GameModeReference;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -140,9 +146,15 @@ public:
 	UFUNCTION()
 	void MakeMeleeDamage(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
 
+	UFUNCTION()
+	void OnHealthChange(UUndegard_HealthComponent* CurrentHealthComponent, AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser);
+
 	UFUNCTION(BlueprintCallable)
 	void SetComboEnabled(bool NewState);
 
 	UFUNCTION(BlueprintCallable)
 	void ResetCombo();
+
+	UFUNCTION(BlueprintCallable)
+	bool HasToDestroy() { return bHasToDestroy; };
 };

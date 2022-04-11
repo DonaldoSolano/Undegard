@@ -12,6 +12,7 @@
 #include "Undegard_Weapon.h"
 #include "Undegard_Rifle.h"
 #include "Character/Components/Undegard_HealthComponent.h"
+#include "Core/Undegard_GameMode.h"
 
 // Sets default values
 AUndegard_Character::AUndegard_Character()
@@ -59,6 +60,8 @@ void AUndegard_Character::BeginPlay()
 	CreateInitialWeapon();
 	InitializeReferences();
 	MeleeDetectorComponent->OnComponentBeginOverlap.AddDynamic(this,&AUndegard_Character::MakeMeleeDamage);
+
+	HealthComponent->OnHealthChangeDelegate.AddDynamic(this, &AUndegard_Character::OnHealthChange);
 }
 
 void AUndegard_Character::InitializeReferences()
@@ -67,6 +70,8 @@ void AUndegard_Character::InitializeReferences()
 	{
 		AnimInstance = GetMesh()->GetAnimInstance();
 	}
+
+	GameModeReference = Cast<AUndegard_GameMode>(GetWorld()->GetAuthGameMode());
 }
 
 // Called every frame
@@ -167,6 +172,17 @@ void AUndegard_Character::MakeMeleeDamage(UPrimitiveComponent * OverlappedCompon
 	{
 		//const FHitResult & SweepResult in this case works as an argument we can retrieve info from because of the const + &.
 		UGameplayStatics::ApplyPointDamage(OtherActor, MeleeDamage * CurrentComboMultiplier, SweepResult.Location, SweepResult, GetInstigatorController(),this, nullptr);
+	}
+}
+
+void AUndegard_Character::OnHealthChange(UUndegard_HealthComponent * CurrentHealthComponent, AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
+{
+	if (HealthComponent->IsDead())
+	{
+		if (IsValid(GameModeReference))
+		{
+			GameModeReference->GameOver(this);
+		}
 	}
 }
 
