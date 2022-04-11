@@ -7,6 +7,8 @@
 #include "Undegard_HealthComponent.generated.h"
 
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnHealthChangeSignature, UUndegard_HealthComponent*, CurrentHealthComponent, AActor *, DamagedActor, float, Damage, const UDamageType *, DamageType, AController *, InstigatedBy, AActor *, DamageCauser);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNDEGARD_API UUndegard_HealthComponent : public UActorComponent
 {
@@ -21,6 +23,16 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Health Component")
 	AActor* MyOwner;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Debug")
+	bool bDebug;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Health Component")
+	bool bIsDead;
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChangeSignature OnHealthChangeDelegate;
 
 public:	
 	// Sets default values for this component's properties
@@ -37,5 +49,6 @@ public:
 	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
-		
+	UFUNCTION(BlueprintCallable)
+	bool IsDead() const { return bIsDead; };
 };

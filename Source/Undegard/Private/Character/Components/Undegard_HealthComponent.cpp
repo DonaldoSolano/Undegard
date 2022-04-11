@@ -42,12 +42,23 @@ void UUndegard_HealthComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 void UUndegard_HealthComponent::TakeDamage(AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
 {
-	if (Damage <= 0.0f)
+	if (Damage <= 0.0f || bIsDead)
 	{
 		return;
 	}
 	CurrentHealth = FMath::Clamp(CurrentHealth - Damage, 0.0f, MaxHealth);
 
-	UE_LOG(LogTemp, Log, TEXT("My Health is: %s"), *FString::SanitizeFloat(CurrentHealth));
+	if (CurrentHealth == 0.0f)
+	{
+		bIsDead = true;
+	}
+
+	OnHealthChangeDelegate.Broadcast(this, DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
+
+	if (bDebug)
+	{
+		UE_LOG(LogTemp, Log, TEXT("My Health is: %s"), *FString::SanitizeFloat(CurrentHealth));
+	}
+	
 }
 
