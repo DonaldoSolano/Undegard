@@ -111,7 +111,7 @@ protected:
 	AUndegard_Weapon* CurrentWeapon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
-	UAnimMontage* MeleeMontage;
+	TArray<UAnimMontage*>  MeleeMontage;
 
 	UAnimInstance* AnimInstance;
 

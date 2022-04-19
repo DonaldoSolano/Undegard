@@ -132,10 +132,23 @@ void AUndegard_Character::StartMelee()
 		}
 	}
 
-	if (IsValid(AnimInstance) && IsValid(MeleeMontage))
+	if (IsValid(AnimInstance) && IsValid(MeleeMontage[0]))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player starts melee action"));
-		AnimInstance->Montage_Play(MeleeMontage);
+		switch (int(CurrentComboMultiplier))
+		{
+		case 1:
+			UE_LOG(LogTemp, Warning, TEXT("Player starts melee action 0"));
+			AnimInstance->Montage_Play(MeleeMontage[0]);
+			break;
+
+		case 2:
+			UE_LOG(LogTemp, Warning, TEXT("Player starts melee action 1"));
+			AnimInstance->Montage_Play(MeleeMontage[1]);
+			break;
+		default:
+			break;
+		}
+		
 	}
 	SetActionsState(true);
 }
