@@ -19,5 +19,6 @@ void AUdegard_DoorKey::Pickup(AUndegard_Character* PickupActor)
 	Super::Pickup(PickupActor);
 
 	PickupActor->AddKey(KeyTag);
+	PickupActor->GainUltimateXP(XPValue);
 	Destroy();
 }

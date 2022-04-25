@@ -27,6 +27,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Key")
 	FName KeyTag;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Key")
+	float XPValue;
+
 public:
 	UFUNCTION(BlueprintCallable, Category = "Getter")
 	FName GetKeyTag() const { return KeyTag; };
