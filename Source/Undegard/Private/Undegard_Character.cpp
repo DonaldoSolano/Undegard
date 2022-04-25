@@ -59,6 +59,9 @@ void AUndegard_Character::BeginPlay()
 	Super::BeginPlay();
 	CreateInitialWeapon();
 	InitializeReferences();
+
+	MaxUltimateXP = 100.0f;
+
 	MeleeDetectorComponent->OnComponentBeginOverlap.AddDynamic(this,&AUndegard_Character::MakeMeleeDamage);
 
 	HealthComponent->OnHealthChangeDelegate.AddDynamic(this, &AUndegard_Character::OnHealthChange);
@@ -104,6 +107,9 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAction("Melee", IE_Pressed, this, &AUndegard_Character::StartMelee);
 	PlayerInputComponent->BindAction("Melee", IE_Released, this, &AUndegard_Character::StopMelee);
+
+	PlayerInputComponent->BindAction("Ultimate", IE_Pressed, this, &AUndegard_Character::StartUltimate);
+	PlayerInputComponent->BindAction("Ultimate", IE_Released, this, &AUndegard_Character::StopUltimate);
 }
 
 void AUndegard_Character::StartMelee()
@@ -208,6 +214,36 @@ void AUndegard_Character::ResetCombo()
 {
 	SetComboEnabled(false);
 	CurrentComboMultiplier = 1.0f;
+}
+
+void AUndegard_Character::GainUltimateXP(float XPGained)
+{
+	if (bCanUseUltimate || bIsUsingUltimate)
+	{
+		return;
+	}
+
+	CurrentUltimateXP = FMath::Clamp(CurrentUltimateXP + XPGained, 0.0f, MaxUltimateXP);
+
+	if (CurrentUltimateXP == MaxUltimateXP)
+	{
+		bCanUseUltimate = true;
+	}
+
+	BP_GainUltimateXP(XPGained);
+}
+
+void AUndegard_Character::StartUltimate()
+{
+	if (bCanUseUltimate && !bIsUsingUltimate)
+	{
+		BP_StartUltimate();
+		bIsUsingUltimate = true;
+	}
+}
+
+void AUndegard_Character::StopUltimate()
+{
 }
 
 void AUndegard_Character::MoveForward(float value) {

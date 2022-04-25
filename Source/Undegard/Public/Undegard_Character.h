@@ -71,8 +71,20 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Melee")
 	bool bIsComboEnabled;
 
-	UPROPERTY( EditDefaultsOnly,BlueprintReadOnly, Category = "Game Over")
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Game Over")
 	bool bHasToDestroy;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ultimate")
+	bool bCanUseUltimate;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ultimate")
+	bool bIsUsingUltimate;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ultimate", meta =(ClampMin = 0.0, UIMin = 0.0))
+	float MaxUltimateXP;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ultimate")
+	float CurrentUltimateXP;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
 	float MeleeDamage;
@@ -111,7 +123,7 @@ protected:
 	AUndegard_Weapon* CurrentWeapon;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Animation")
-	TArray<UAnimMontage*>  MeleeMontage;
+	TArray<UAnimMontage*> MeleeMontage;
 
 	UAnimInstance* AnimInstance;
 
@@ -157,4 +169,24 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool HasToDestroy() { return bHasToDestroy; };
+
+	UFUNCTION(BlueprintCallable)
+	void GainUltimateXP(float XPGained);
+
+	UFUNCTION(BlueprintCallable)
+	void StartUltimate();
+
+	UFUNCTION(BlueprintCallable)
+	void StopUltimate();
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_GainUltimateXP(float XPGained);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_StartUltimate();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_StopUltimate();
+
 };
