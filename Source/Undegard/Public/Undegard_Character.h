@@ -85,6 +85,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Ultimate")
 	float CurrentUltimateXP;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Ultimate|Time", meta = (ClampMin = 0.0, UIMin = 0.0))
+	float MaxUltimateDuration;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ultimate|Time")
+	float CurrentUltimateDuration;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Melee")
 	float MeleeDamage;
