@@ -16,6 +16,13 @@ class UCapsuleComponent;
 class UUndegard_HealthComponent;
 class AUndegard_GameMode;
 
+UENUM(Blueprintable)
+enum class EUndegard_CharacterType : uint8
+{
+	CharacterType_Player UMETA(DisplayName = "Player"),
+	CharacterType_Enemy UMETA(DisplayName = "Enemy")
+};
+
 UCLASS()
 class UNDEGARD_API AUndegard_Character : public ACharacter
 {
@@ -122,6 +129,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Key")
 	TArray<FName> DoorKeys;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	EUndegard_CharacterType CharacterType;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<AUndegard_Weapon> InitialWeaponClass;
 
@@ -184,6 +194,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StopUltimate();
+
+	UFUNCTION(BlueprintCallable)
+	EUndegard_CharacterType GetCharacterType() { return CharacterType; };
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

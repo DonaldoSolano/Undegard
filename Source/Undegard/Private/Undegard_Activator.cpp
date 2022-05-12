@@ -48,7 +48,7 @@ void AUndegard_Activator::CheckIfPlayerColliding(UPrimitiveComponent * Overlappe
 	{
 		AUndegard_Character* OverlappedCharacter = Cast<AUndegard_Character>(OtherActor);
 		
-		if (IsValid(OverlappedCharacter))
+		if (IsValid(OverlappedCharacter) && OverlappedCharacter->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
 		{
 			LaunchpadActivated();
 		}

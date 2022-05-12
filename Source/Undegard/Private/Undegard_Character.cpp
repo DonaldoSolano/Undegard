@@ -196,7 +196,7 @@ void AUndegard_Character::MakeMeleeDamage(UPrimitiveComponent * OverlappedCompon
 
 void AUndegard_Character::OnHealthChange(UUndegard_HealthComponent * CurrentHealthComponent, AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
 {
-	if (HealthComponent->IsDead())
+	if (HealthComponent->IsDead() && GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
 	{
 		if (IsValid(GameModeReference))
 		{

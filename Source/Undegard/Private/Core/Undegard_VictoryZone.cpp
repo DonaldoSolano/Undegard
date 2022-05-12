@@ -37,7 +37,7 @@ void AUndegard_VictoryZone::NotifyActorBeginOverlap(AActor * OtherActor)
 	{
 		AUndegard_Character* UndegardCharacter = Cast<AUndegard_Character>(OtherActor);
 
-		if (IsValid(UndegardCharacter))
+		if (IsValid(UndegardCharacter) && UndegardCharacter->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
 		{
 			GameModeReference->Victory(UndegardCharacter);
 		}

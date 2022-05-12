@@ -51,7 +51,7 @@ void AUndegard_Door::CheckKeyFromPlayer(UPrimitiveComponent * OverlappedComponen
 		AUndegard_Character* OverlappedCharacter = Cast<AUndegard_Character>(OtherActor);
 		if (IsValid(OverlappedCharacter))
 		{
-			if (OverlappedCharacter->HasKey(DoorTag))
+			if (OverlappedCharacter->HasKey(DoorTag) && OverlappedCharacter->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
 			{
 				OpenDoor();
 			}
