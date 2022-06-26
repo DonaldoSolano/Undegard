@@ -189,8 +189,24 @@ void AUndegard_Character::MakeMeleeDamage(UPrimitiveComponent * OverlappedCompon
 {
 	if (IsValid(OtherActor))
 	{
-		//const FHitResult & SweepResult in this case works as an argument we can retrieve info from because of the const + &.
-		UGameplayStatics::ApplyPointDamage(OtherActor, MeleeDamage * CurrentComboMultiplier, SweepResult.Location, SweepResult, GetInstigatorController(),this, nullptr);
+		if (OtherActor == this)
+		{
+			return;
+		}
+
+		AUndegard_Character* MeleeTarget = Cast<AUndegard_Character>(OtherActor);
+
+		if (IsValid(MeleeTarget))
+		{
+			bool bPlayerAttackingEnemy = GetCharacterType() == EUndegard_CharacterType::CharacterType_Player && MeleeTarget->GetCharacterType() == EUndegard_CharacterType::CharacterType_Enemy;
+			bool bEnemyAttackingPlayer = GetCharacterType() == EUndegard_CharacterType::CharacterType_Enemy && MeleeTarget->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player;
+
+			if (bPlayerAttackingEnemy || bEnemyAttackingPlayer)
+			{
+				//const FHitResult & SweepResult in this case works as an argument we can retrieve info from because of the const + &.
+				UGameplayStatics::ApplyPointDamage(OtherActor, MeleeDamage * CurrentComboMultiplier, SweepResult.Location, SweepResult, GetInstigatorController(), this, nullptr);
+			}
+		}
 	}
 }
 

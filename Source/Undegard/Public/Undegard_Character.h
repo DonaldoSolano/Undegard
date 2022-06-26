@@ -51,9 +51,6 @@ protected:
 
 	void CreateInitialWeapon();
 
-	void StartMelee();
-	void StopMelee();
-
 	virtual void AddControllerPitchInput(float value) override;
 
 protected:
@@ -177,6 +174,12 @@ public:
 	UFUNCTION()
 	void OnHealthChange(UUndegard_HealthComponent* CurrentHealthComponent, AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser);
 
+	UFUNCTION(BlueprintCallable)
+	void StartMelee();
+
+	UFUNCTION(BlueprintCallable)
+	void StopMelee();
+	
 	UFUNCTION(BlueprintCallable)
 	void SetComboEnabled(bool NewState);
 
