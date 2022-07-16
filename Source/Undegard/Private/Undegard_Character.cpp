@@ -65,6 +65,8 @@ void AUndegard_Character::BeginPlay()
 	MeleeDetectorComponent->OnComponentBeginOverlap.AddDynamic(this,&AUndegard_Character::MakeMeleeDamage);
 
 	HealthComponent->OnHealthChangeDelegate.AddDynamic(this, &AUndegard_Character::OnHealthChange);
+
+	bCanCharacterUseWeapon = true;
 }
 
 void AUndegard_Character::InitializeReferences()

@@ -44,8 +44,7 @@ protected:
 	virtual void Jump() override;
 	virtual void StopJumping() override;
 
-	void StartWeaponAction();
-	void StopWeaponAction();
+	
 
 	void SwitchWeaponMode();
 
@@ -173,6 +172,12 @@ public:
 
 	UFUNCTION()
 	void OnHealthChange(UUndegard_HealthComponent* CurrentHealthComponent, AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser);
+
+	UFUNCTION(BlueprintCallable)
+	void StartWeaponAction();
+
+	UFUNCTION(BlueprintCallable)
+	void StopWeaponAction();
 
 	UFUNCTION(BlueprintCallable)
 	void StartMelee();
