@@ -158,6 +158,8 @@ public:
 
 	void AddKey(FName NewKey);
 
+	void AddHealth(float HealthToAdd);
+
 	bool HasKey(FName KeyTag);
 
 	void SetActionsState(bool NewState);

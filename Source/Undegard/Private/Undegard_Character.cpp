@@ -171,6 +171,11 @@ void AUndegard_Character::AddKey(FName NewKey)
 	DoorKeys.Add(NewKey);
 }
 
+void AUndegard_Character::AddHealth(float HealthToAdd)
+{
+	HealthComponent->AddHealth(HealthToAdd);
+}
+
 bool AUndegard_Character::HasKey(FName KeyTag)
 {
 	return DoorKeys.Contains(KeyTag);

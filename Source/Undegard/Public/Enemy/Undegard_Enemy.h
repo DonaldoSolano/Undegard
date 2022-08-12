@@ -10,6 +10,8 @@
  * 
  */
 class AUndegard_PathActor;
+class AUndegard_Item;
+
 UCLASS()
 class UNDEGARD_API AUndegard_Enemy : public AUndegard_Character
 {
@@ -27,6 +29,27 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|Navigation Path")
 	float WaitingTimeOnPathPoint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|XP")
+	float XPValue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loot System")
+	float LootProbability;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loot System")
+	TSubclassOf<AUndegard_Item> LootItemClass;
+
+protected:
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void GiveXP(AActor* DamageCauser);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_GiveXP(AActor* DamageCauser);
+
+	UFUNCTION()
+	bool TrySpawnLoot();
 
 public:
 	AUndegard_Enemy();

@@ -51,6 +51,7 @@ void UUndegard_HealthComponent::TakeDamage(AActor * DamagedActor, float Damage, 
 	if (CurrentHealth == 0.0f)
 	{
 		bIsDead = true;
+		OnDeadDelegate.Broadcast(DamageCauser);
 	}
 
 	OnHealthChangeDelegate.Broadcast(this, DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
@@ -60,5 +61,20 @@ void UUndegard_HealthComponent::TakeDamage(AActor * DamagedActor, float Damage, 
 		UE_LOG(LogTemp, Log, TEXT("My Health is: %s"), *FString::SanitizeFloat(CurrentHealth));
 	}
 	
+}
+
+void UUndegard_HealthComponent::AddHealth(float HealthToAdd)
+{
+	if (CurrentHealth == MaxHealth || bIsDead)
+	{
+		return;
+	}
+
+	CurrentHealth = FMath::Clamp(CurrentHealth + HealthToAdd, 0.0f, MaxHealth);
+
+	if (bDebug)
+	{
+		UE_LOG(LogTemp, Log, TEXT("My Health is: %s"), *FString::SanitizeFloat(CurrentHealth));
+	}
 }
 
