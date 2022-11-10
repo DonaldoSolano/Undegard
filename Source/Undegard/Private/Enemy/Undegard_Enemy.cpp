@@ -7,11 +7,15 @@
 #include "Undegard_Character.h"
 #include "Undegard_Rifle.h"
 #include "Items/Undegard_Item.h"
+#include "Enemy/Controller/Undegard_AIController.h"
+#include "AIModule/Classes/Perception/AISense_Damage.h"
 
 void AUndegard_Enemy::BeginPlay()
 {
 	Super::BeginPlay();
+	HealthComponent->OnHealthChangeDelegate.AddDynamic(this, &AUndegard_Enemy::HealthChanged);
 	HealthComponent->OnDeadDelegate.AddDynamic(this, &AUndegard_Enemy::GiveXP);
+	MyAIController = Cast<AUndegard_AIController>(GetController());
 }
 
 void AUndegard_Enemy::GiveXP(AActor * DamageCauser)
@@ -35,6 +39,29 @@ void AUndegard_Enemy::GiveXP(AActor * DamageCauser)
 	}
 
 	BP_GiveXP(DamageCauser);
+}
+
+void AUndegard_Enemy::HealthChanged(UUndegard_HealthComponent * CurrentHealthComponent, AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
+{
+	if (!IsValid(MyAIController))
+	{
+		return;
+	}
+	if (CurrentHealthComponent->IsDead())
+	{
+		MyAIController->UnPossess();
+	}
+	else
+	{
+		AUndegard_Rifle* Rifle = Cast<AUndegard_Rifle>(DamageCauser);
+		if (IsValid(Rifle))
+		{
+			//To avoid acces to two pointer at the same time the rifle owner reference is stored in an actor variable
+			AActor* RifleOwner = Rifle->GetOwner();
+			MyAIController->SetReceiveDamage(true);
+			UAISense_Damage::ReportDamageEvent(GetWorld(),this, RifleOwner, Damage, RifleOwner->GetActorLocation(), FVector::ZeroVector);
+		}
+	}
 }
 
 bool AUndegard_Enemy::TrySpawnLoot()

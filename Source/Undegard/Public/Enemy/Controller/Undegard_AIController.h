@@ -9,6 +9,8 @@
 
 class UBehaviorTree;
 class AUndegard_Enemy;
+class UBlackboardComponent;
+class UAIPerceptionComponent;
 
 /**
  * 
@@ -21,15 +23,47 @@ class UNDEGARD_API AUndegard_AIController : public AAIController
 public:
 	AUndegard_AIController();
 
-
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UAIPerceptionComponent* AIPerceptionComponent;
 
 protected:
+	UPROPERTY(BlueprintReadWrite, Category = "Enemy Controller")
+	bool bReceivingDamage;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Controller")
 	UBehaviorTree* EnemyBehaviorTree;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Enemy Controller")
+	UBlackboardComponent* MyBlackBoard;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Enemy Controller")
 	AUndegard_Enemy* MyEnemy;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Enemy Controller")
+	FName LoopPathParameterName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Controller")
+	FName DirectionIndexParameterName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Controller")
+	FName WaitingTimeOnPointParameterName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Controller")
+	FName CanSeePlayerParameterName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Controller")
+	FName InvestigatingParameterName;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Enemy Controller")
+	FName TargetLocationParameterName;
 
 protected:
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void UpdateSenses(const TArray<AActor*>& UpdatedActors);
+
+public:
+	void SetReceiveDamage(bool bNewState) { bReceivingDamage = bNewState; };
 };
