@@ -14,6 +14,7 @@
 #include "Undegard_Rifle.h"
 #include "Items/Undegard_Item.h"
 #include "Undegard_Rifle.h"
+#include "Enemy/Undegard_BotSpawner.h"
 
 // Sets default values
 AUndegard_Bot::AUndegard_Bot()
@@ -145,6 +146,11 @@ void AUndegard_Bot::SelfDestruction()
 	IgnoredActors.Add(this);
 
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), ExplosionDamage, GetActorLocation(), ExplotionRadius, nullptr, IgnoredActors, this, GetInstigatorController(), true);
+
+	if (IsValid(MySpawner))
+	{
+		MySpawner->NotifyBotDead();
+	}
 
 	Destroy();
 }

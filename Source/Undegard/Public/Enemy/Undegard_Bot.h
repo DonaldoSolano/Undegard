@@ -13,6 +13,7 @@ class UMaterialInstanceDynamic;
 class USphereComponent;
 class UParticleSystem;
 class AUndegard_Item;
+class AUndegard_BotSpawner;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Bot : public APawn
@@ -60,6 +61,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loot System")
 	float LootProbability;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Spawner")
+	AUndegard_BotSpawner* MySpawner;
 	
 	UPROPERTY(BlueprintReadOnly, Category = "Bot")
 	FVector NextPathPoint;
@@ -110,4 +114,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetSpawner(AUndegard_BotSpawner* NewSpawner) { MySpawner = NewSpawner; };
+
+	UFUNCTION(BlueprintCallable)
+	AUndegard_BotSpawner* GetSpawner() { return MySpawner; };
 };
