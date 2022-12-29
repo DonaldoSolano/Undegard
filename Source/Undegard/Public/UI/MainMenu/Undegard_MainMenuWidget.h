@@ -15,6 +15,10 @@ class UNDEGARD_API UUndegard_MainMenuWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Main Menu|Level")
+	FName GamePlayLevelName;
+
+protected:
 	UFUNCTION(BlueprintCallable, Category = "Main Menu")
 	void NewGame();
 
