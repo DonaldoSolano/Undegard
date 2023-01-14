@@ -9,6 +9,7 @@
 #include "Items/Undegard_Item.h"
 #include "Enemy/Controller/Undegard_AIController.h"
 #include "AIModule/Classes/Perception/AISense_Damage.h"
+#include "Core/Undegard_GameInstance.h"
 
 void AUndegard_Enemy::BeginPlay()
 {
@@ -50,6 +51,11 @@ void AUndegard_Enemy::HealthChanged(UUndegard_HealthComponent * CurrentHealthCom
 	if (CurrentHealthComponent->IsDead())
 	{
 		MyAIController->UnPossess();
+
+		if (IsValid(GameInstanceReference))
+		{
+			GameInstanceReference->AddDefeatedEnemyCounter();
+		}
 	}
 	else
 	{
