@@ -13,6 +13,7 @@
 #include "Undegard_Rifle.h"
 #include "Character/Components/Undegard_HealthComponent.h"
 #include "Core/Undegard_GameMode.h"
+#include "Core/Undegard_GameInstance.h"
 
 // Sets default values
 AUndegard_Character::AUndegard_Character()
@@ -48,6 +49,8 @@ AUndegard_Character::AUndegard_Character()
 	MeleeDetectorComponent->SetCollisionResponseToChannel(COLLISION_ENEMY, ECR_Overlap);
 	MeleeDetectorComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	MainMenuMapName = "MainMenuMap";
+
 	MeleeDamage = 10.0f;
 
 	HealthComponent = CreateDefaultSubobject<UUndegard_HealthComponent>(TEXT("HealthComponent"));
@@ -77,6 +80,7 @@ void AUndegard_Character::InitializeReferences()
 	}
 
 	GameModeReference = Cast<AUndegard_GameMode>(GetWorld()->GetAuthGameMode());
+	GameInstanceReference = Cast<UUndegard_GameInstance>(GetWorld()->GetGameInstance());
 }
 
 // Called every frame
@@ -112,6 +116,8 @@ void AUndegard_Character::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAction("Ultimate", IE_Pressed, this, &AUndegard_Character::StartUltimate);
 	PlayerInputComponent->BindAction("Ultimate", IE_Released, this, &AUndegard_Character::StopUltimate);
+
+	PlayerInputComponent->BindAction("Exit", IE_Pressed, this, &AUndegard_Character::GoToMainMenu);
 }
 
 void AUndegard_Character::StartMelee()
@@ -267,6 +273,16 @@ void AUndegard_Character::StartUltimate()
 
 void AUndegard_Character::StopUltimate()
 {
+}
+
+void AUndegard_Character::GoToMainMenu()
+{
+
+	if (IsValid(GameInstanceReference))
+	{
+		GameInstanceReference->SaveData();
+	}
+	UGameplayStatics::OpenLevel(GetWorld(),MainMenuMapName);
 }
 
 void AUndegard_Character::MoveForward(float value) {

@@ -15,6 +15,7 @@ class UAnimInstance;
 class UCapsuleComponent;
 class UUndegard_HealthComponent;
 class AUndegard_GameMode;
+class UUndegard_GameInstance;
 
 UENUM(Blueprintable)
 enum class EUndegard_CharacterType : uint8
@@ -113,6 +114,9 @@ protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Melee")
 	FName MeleeSocketName;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Levels")
+	FName MainMenuMapName;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
 
@@ -146,6 +150,8 @@ protected:
 	UUndegard_HealthComponent* HealthComponent;
 
 	AUndegard_GameMode* GameModeReference;
+
+	UUndegard_GameInstance* GameInstanceReference;
 
 public:	
 	// Called every frame
@@ -204,6 +210,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StopUltimate();
+
+	UFUNCTION(BlueprintCallable)
+	void GoToMainMenu();
 
 	UFUNCTION(BlueprintCallable)
 	EUndegard_CharacterType GetCharacterType() { return CharacterType; };
