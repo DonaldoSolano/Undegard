@@ -15,6 +15,7 @@
 #include "Items/Undegard_Item.h"
 #include "Undegard_Rifle.h"
 #include "Enemy/Undegard_BotSpawner.h"
+#include "Core/Undegard_GameInstance.h"
 
 // Sets default values
 AUndegard_Bot::AUndegard_Bot()
@@ -64,6 +65,8 @@ void AUndegard_Bot::BeginPlay()
 
 	HealthComponent->OnDeadDelegate.AddDynamic(this, &AUndegard_Bot::GiveXP);
 
+	GameInstanceReference = Cast<UUndegard_GameInstance>(GetWorld()->GetGameInstance());
+
 	//Get the player reference and then verify if the pawn is a player character.
 	APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(),0);
 	if (IsValid(PlayerPawn))
@@ -107,9 +110,16 @@ void AUndegard_Bot::OnHealthChange(UUndegard_HealthComponent * CurrentHealthComp
 			if (IsValid(CharacterCauser))
 			{
 				TrySpawnLoot();
+
+				if (IsValid(GameInstanceReference))
+				{
+					GameInstanceReference->AddDefeatedEnemyCounter();
+				}
 			}
 		}
+
 		SelfDestruction();
+
 	}
 }
 

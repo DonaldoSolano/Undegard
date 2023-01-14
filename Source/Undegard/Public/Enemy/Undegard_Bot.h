@@ -14,6 +14,7 @@ class USphereComponent;
 class UParticleSystem;
 class AUndegard_Item;
 class AUndegard_BotSpawner;
+class UUndegard_GameInstance;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Bot : public APawn
@@ -78,6 +79,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loot System")
 	TSubclassOf<AUndegard_Item> LootItemClass;
+
+	UUndegard_GameInstance* GameInstanceReference;
 
 public:
 	// Sets default values for this pawn's properties
