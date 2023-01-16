@@ -29,6 +29,8 @@ void UUndegard_HealthComponent::BeginPlay()
 
 	}
 	
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle_UpdateInitialHealth, this, &UUndegard_HealthComponent::UpdateInitialHealth, 0.2f, false);
 }
 
 
@@ -55,6 +57,7 @@ void UUndegard_HealthComponent::TakeDamage(AActor * DamagedActor, float Damage, 
 	}
 
 	OnHealthChangeDelegate.Broadcast(this, DamagedActor, Damage, DamageType, InstigatedBy, DamageCauser);
+	OnHealthUpdateDelegate.Broadcast(CurrentHealth, MaxHealth);
 
 	if (bDebug)
 	{
@@ -71,10 +74,16 @@ void UUndegard_HealthComponent::AddHealth(float HealthToAdd)
 	}
 
 	CurrentHealth = FMath::Clamp(CurrentHealth + HealthToAdd, 0.0f, MaxHealth);
+	OnHealthUpdateDelegate.Broadcast(CurrentHealth, MaxHealth);
 
 	if (bDebug)
 	{
 		UE_LOG(LogTemp, Log, TEXT("My Health is: %s"), *FString::SanitizeFloat(CurrentHealth));
 	}
+}
+
+void UUndegard_HealthComponent::UpdateInitialHealth()
+{
+	OnHealthUpdateDelegate.Broadcast(CurrentHealth, MaxHealth);
 }
 

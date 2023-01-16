@@ -11,6 +11,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_SixParams(FOnHealthChangeSignature, UUndegard
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeadSignature, AActor*, DamageCauser);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnHealthUpdateSignature, float, CurrentHealth, float, MaxHealth);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNDEGARD_API UUndegard_HealthComponent : public UActorComponent
 {
@@ -32,12 +34,17 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "Health Component")
 	bool bIsDead;
 
+	FTimerHandle TimerHandle_UpdateInitialHealth;
+
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnHealthChangeSignature OnHealthChangeDelegate;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDeadSignature OnDeadDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthUpdateSignature OnHealthUpdateDelegate;
 
 public:	
 	// Sets default values for this component's properties
@@ -58,4 +65,6 @@ public:
 	bool IsDead() const { return bIsDead; };
 
 	void AddHealth(float HealthToAdd);
+
+	void UpdateInitialHealth();
 };
