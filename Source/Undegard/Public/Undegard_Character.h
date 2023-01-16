@@ -217,6 +217,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	EUndegard_CharacterType GetCharacterType() { return CharacterType; };
 
+	UUndegard_HealthComponent* GetHealthComponent(){ return HealthComponent; };
+
 protected:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_GainUltimateXP(float XPGained);
