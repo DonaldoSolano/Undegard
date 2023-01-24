@@ -17,6 +17,9 @@ class UUndegard_HealthComponent;
 class AUndegard_GameMode;
 class UUndegard_GameInstance;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUltimateUpdateSignature, float, CurrentUltimateXP, float, MaxUltimateXP);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUltimateStatusSignature, bool, bIsAvailable);
+
 UENUM(Blueprintable)
 enum class EUndegard_CharacterType : uint8
 {
@@ -40,12 +43,14 @@ protected:
 	void InitializeReferences();
 
 	void MoveForward(float value);
-	void MoveRight(float value);
-	void Sprint();
-	virtual void Jump() override;
-	virtual void StopJumping() override;
 
-	
+	void MoveRight(float value);
+
+	void Sprint();
+
+	virtual void Jump() override;
+
+	virtual void StopJumping() override;
 
 	void SwitchWeaponMode();
 
@@ -153,6 +158,16 @@ protected:
 
 	UUndegard_GameInstance* GameInstanceReference;
 
+public:
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnUltimateUpdateSignature OnUltimateUpdateDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnUltimateStatusSignature OnUltimateStatusDelegate;
+
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -212,6 +227,12 @@ public:
 	void StopUltimate();
 
 	UFUNCTION(BlueprintCallable)
+	void UpdateUltimateDuration(float Value);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateUltimateDurationWithTimer();
+
+	UFUNCTION(BlueprintCallable)
 	void GoToMainMenu();
 
 	UFUNCTION(BlueprintCallable)
@@ -228,5 +249,9 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void BP_StopUltimate();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void BP_UltimateDuration(float Value);
+	
 
 };

@@ -253,10 +253,12 @@ void AUndegard_Character::GainUltimateXP(float XPGained)
 	}
 
 	CurrentUltimateXP = FMath::Clamp(CurrentUltimateXP + XPGained, 0.0f, MaxUltimateXP);
+	OnUltimateUpdateDelegate.Broadcast(CurrentUltimateXP, MaxUltimateXP);
 
 	if (CurrentUltimateXP == MaxUltimateXP)
 	{
 		bCanUseUltimate = true;
+		OnUltimateStatusDelegate.Broadcast(bCanUseUltimate);
 	}
 
 	BP_GainUltimateXP(XPGained);
@@ -269,6 +271,32 @@ void AUndegard_Character::StartUltimate()
 		BP_StartUltimate();
 		bIsUsingUltimate = true;
 	}
+}
+
+void AUndegard_Character::UpdateUltimateDuration(float Value)
+{
+	CurrentUltimateDuration = FMath::Clamp(CurrentUltimateDuration - Value, 0.0f, MaxUltimateDuration);
+	OnUltimateUpdateDelegate.Broadcast(CurrentUltimateDuration, MaxUltimateDuration);
+	BP_UltimateDuration(Value);
+
+	if (CurrentUltimateDuration == 0.0f)
+	{
+		bIsUsingUltimate = false;
+		CurrentUltimateXP = 0.0f;
+		OnUltimateStatusDelegate.Broadcast(bCanUseUltimate);
+		//GetCharacterMovement()->MaxWalkSpeed = NormalWalkSpeed;
+		//PlayRate = 1.0f;
+		//if(!bUltimateWithTick)
+		//{
+		//	GetWorld()->GetTimerManager().ClearTimer(TimerHandle_Ultimate);
+		//}
+		BP_StopUltimate();
+	}
+}
+
+void AUndegard_Character::UpdateUltimateDurationWithTimer()
+{
+	//UpdateUltimateDuration(UltimateFrecuency);
 }
 
 void AUndegard_Character::StopUltimate()
