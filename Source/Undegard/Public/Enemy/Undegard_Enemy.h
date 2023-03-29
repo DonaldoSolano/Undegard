@@ -12,6 +12,8 @@
 class AUndegard_PathActor;
 class AUndegard_Item;
 class AUndegard_AIController;
+class UWidgetComponent;
+class UUndegard_EnemyHealthBar;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Enemy : public AUndegard_Character
@@ -19,11 +21,18 @@ class UNDEGARD_API AUndegard_Enemy : public AUndegard_Character
 	GENERATED_BODY()
 	
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UWidgetComponent* WidgetHealthBarComponent;
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI|Navigation Path")
 	AUndegard_PathActor* PathActor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|Navigation Path")
 	bool bLoopPath;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
+	bool bIsShowingHealthBar;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|Navigation Path")
 	int DirectionIndex;
@@ -42,6 +51,11 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Controller")
 	AUndegard_AIController* MyAIController;
+
+	UPROPERTY(BlueprintReadOnly, Category = "UI")
+	UUndegard_EnemyHealthBar* EnemyHealthBar;
+
+	FTimerHandle TimerHandle_HideHealthBar;
 
 protected:
 	virtual void BeginPlay() override;
@@ -67,6 +81,9 @@ public:
 
 	UFUNCTION()
 	float GetWaitingTime() { return WaitingTimeOnPathPoint; };
+
+	void ShowHealthBar();
+	void HideHealthBar();
 
 public:
 	AUndegard_Enemy();
