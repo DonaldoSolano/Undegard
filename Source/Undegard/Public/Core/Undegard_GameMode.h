@@ -8,9 +8,9 @@
 
 class AUndegard_Character;
 class AUndegard_SpectatingCamera;
-/**
- * 
- */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKeyAddedSignature, FName, KeyTag);
+
 UCLASS()
 class UNDEGARD_API AUndegard_GameMode : public AGameModeBase
 {
@@ -27,6 +27,15 @@ protected:
 	float SpectatingBlendTime;
 
 public:
+
+	UPROPERTY(BlueprintAssignable)
+	FOnKeyAddedSignature OnKeyAddedDelegate;
+
+public:
+
+	UFUNCTION()
+	void AddKeyToCharacter(AUndegard_Character* KeyOwner, FName KeyTag);
+
 	UFUNCTION()
 	void Victory(AUndegard_Character* Character);
 

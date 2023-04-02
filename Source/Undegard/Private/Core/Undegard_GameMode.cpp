@@ -65,6 +65,15 @@ void AUndegard_GameMode::MoveCameraToSpectatingPoint(AUndegard_SpectatingCamera 
 	}
 }
 
+void AUndegard_GameMode::AddKeyToCharacter(AUndegard_Character* KeyOwner, FName KeyTag)
+{
+	if (IsValid(KeyOwner))
+	{
+		OnKeyAddedDelegate.Broadcast(KeyTag);
+		KeyOwner->AddKey(KeyTag);
+	}
+}
+
 void AUndegard_GameMode::Victory(AUndegard_Character* Character)
 {
 	Character->DisableInput(nullptr);

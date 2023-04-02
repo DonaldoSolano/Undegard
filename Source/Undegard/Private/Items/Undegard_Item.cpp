@@ -4,6 +4,8 @@
 #include "Items/Undegard_Item.h"
 #include "Components/SphereComponent.h"
 #include "Undegard_Character.h"
+#include "Core/Undegard_GameMode.h"
+
 
 // Sets default values
 AUndegard_Item::AUndegard_Item()
@@ -23,7 +25,7 @@ AUndegard_Item::AUndegard_Item()
 void AUndegard_Item::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GameModeReference = Cast<AUndegard_GameMode>(GetWorld()->GetAuthGameMode());
 }
 
 // Called every frame

@@ -8,6 +8,7 @@
 
 class USphereComponent;
 class AUndegard_Character;
+class AUndegard_GameMode;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Item : public AActor
@@ -17,6 +18,10 @@ class UNDEGARD_API AUndegard_Item : public AActor
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Components")
 	USphereComponent* MainColliderComponent;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "Game Mode")
+	AUndegard_GameMode* GameModeReference;
 
 public:	
 	// Sets default values for this actor's properties

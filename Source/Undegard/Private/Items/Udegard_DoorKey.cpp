@@ -4,6 +4,7 @@
 #include "Items/Udegard_DoorKey.h"
 #include "..\..\Public\Items\Udegard_DoorKey.h"
 #include "Undegard_Character.h"
+#include "Core/Undegard_GameMode.h"
 
 AUdegard_DoorKey::AUdegard_DoorKey()
 {
@@ -18,7 +19,14 @@ void AUdegard_DoorKey::Pickup(AUndegard_Character* PickupActor)
 {
 	Super::Pickup(PickupActor);
 
-	PickupActor->AddKey(KeyTag);
-	PickupActor->GainUltimateXP(XPValue);
+	if (IsValid(PickupActor) && PickupActor->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
+	{
+		if (IsValid(GameModeReference))
+		{
+			GameModeReference->AddKeyToCharacter(PickupActor, KeyTag);
+			PickupActor->GainUltimateXP(XPValue);
+		}
+	}
+
 	Destroy();
 }
