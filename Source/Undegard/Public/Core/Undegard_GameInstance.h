@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyKilledSignature, int, EnemiesDefeatedCounter);
+
 UCLASS()
 class UNDEGARD_API UUndegard_GameInstance : public UGameInstance
 {
@@ -23,6 +26,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Enemy Data")
 	int DefetedEnemiesCounter;
+
+public:
+	UPROPERTY(BlueprintAssignable)
+		FOnEnemyKilledSignature OnEnemyKilledDelegate;
 
 public:
 	UFUNCTION(BlueprintCallable)

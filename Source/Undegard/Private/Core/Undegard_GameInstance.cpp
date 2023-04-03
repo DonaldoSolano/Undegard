@@ -12,6 +12,7 @@ UUndegard_GameInstance::UUndegard_GameInstance() {
 void UUndegard_GameInstance::AddDefeatedEnemyCounter()
 {
 	DefetedEnemiesCounter++;
+	OnEnemyKilledDelegate.Broadcast(DefetedEnemiesCounter);
 	BP_AddDefeatedEnemyCounter();
 }
 
