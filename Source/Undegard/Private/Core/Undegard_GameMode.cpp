@@ -8,6 +8,11 @@
 #include "Undegard_SpectatingCamera.h"
 #include "Kismet/GameplayStatics.h"
 
+void AUndegard_GameMode::BackToMainMenu()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), MainMenuMapName);
+}
+
 void AUndegard_GameMode::BeginPlay()
 {
 	Super::BeginPlay();
@@ -65,6 +70,11 @@ void AUndegard_GameMode::MoveCameraToSpectatingPoint(AUndegard_SpectatingCamera 
 	}
 }
 
+AUndegard_GameMode::AUndegard_GameMode()
+{
+	MainMenuMapName = "MainMenuMap";
+}
+
 void AUndegard_GameMode::AddKeyToCharacter(AUndegard_Character* KeyOwner, FName KeyTag)
 {
 	if (IsValid(KeyOwner))
@@ -79,6 +89,10 @@ void AUndegard_GameMode::Victory(AUndegard_Character* Character)
 	Character->DisableInput(nullptr);
 
 	MoveCameraToSpectatingPoint(VictoryCamera,Character);
+
+	OnVictoryDelegate.Broadcast();
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle_BackToMainMenu, this, &AUndegard_GameMode::BackToMainMenu, 3.0f, false);
 
 	BP_Victory(Character);
 }
@@ -99,5 +113,9 @@ void AUndegard_GameMode::GameOver(AUndegard_Character* Character)
 		MoveCameraToSpectatingPoint(GameOverCamera, Character);
 	}
 	
+	OnGameOverDelegate.Broadcast();
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle_BackToMainMenu, this, &AUndegard_GameMode::BackToMainMenu, 3.0f, false);
+
 	BP_GameOver(Character);
 }
