@@ -3,6 +3,9 @@
 
 #include "Undegard_Weapon.h"
 #include "GameFramework/Character.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 AUndegard_Weapon::AUndegard_Weapon()
@@ -27,6 +30,7 @@ void AUndegard_Weapon::Tick(float DeltaTime)
 
 void AUndegard_Weapon::StartAction()
 {
+	PlaySound(ShotSound);
 	BP_StartAction();
 }
 
@@ -42,5 +46,23 @@ void AUndegard_Weapon::SetCharacterOwner(ACharacter * NewOwner)
 		SetOwner(NewOwner);
 		CurrentOwnerCharacter = NewOwner;
 	}
+}
+
+void AUndegard_Weapon::PlaySound(USoundCue* SoundCue, bool bIs3D, FVector SoundLocation)
+{
+	if (!IsValid(SoundCue))
+	{
+		return;
+	}
+
+	if (bIs3D)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundCue, SoundLocation);
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(),SoundCue);
+	}
+	
 }
 

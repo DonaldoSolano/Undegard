@@ -8,6 +8,7 @@
 
 class UDamageType;
 class ACharacter;
+class USoundCue;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Weapon : public AActor
@@ -37,6 +38,9 @@ protected:
 
 	ACharacter* CurrentOwnerCharacter;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Audio")
+	USoundCue* ShotSound;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -49,4 +53,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetCharacterOwner(ACharacter* NewOwner);
+
+	UFUNCTION(BlueprintCallable)
+	void PlaySound(USoundCue* SoundCue, bool bIs3D = false, FVector SoundLocation = FVector::ZeroVector);
 };
