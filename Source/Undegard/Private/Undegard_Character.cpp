@@ -14,6 +14,7 @@
 #include "Character/Components/Undegard_HealthComponent.h"
 #include "Core/Undegard_GameMode.h"
 #include "Core/Undegard_GameInstance.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AUndegard_Character::AUndegard_Character()
@@ -54,6 +55,9 @@ AUndegard_Character::AUndegard_Character()
 	MeleeDamage = 10.0f;
 
 	HealthComponent = CreateDefaultSubobject<UUndegard_HealthComponent>(TEXT("HealthComponent"));
+
+	StepSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("StepSoundComponent"));
+	StepSoundComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -311,6 +315,11 @@ void AUndegard_Character::GoToMainMenu()
 		GameInstanceReference->SaveData();
 	}
 	UGameplayStatics::OpenLevel(GetWorld(),MainMenuMapName);
+}
+
+void AUndegard_Character::PlayStepSound()
+{
+	StepSoundComponent->Play();
 }
 
 void AUndegard_Character::MoveForward(float value) {

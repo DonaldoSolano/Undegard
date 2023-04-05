@@ -16,6 +16,7 @@ class UCapsuleComponent;
 class UUndegard_HealthComponent;
 class AUndegard_GameMode;
 class UUndegard_GameInstance;
+class UAudioComponent;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUltimateUpdateSignature, float, CurrentUltimateXP, float, MaxUltimateXP);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUltimateStatusSignature, bool, bIsAvailable);
@@ -158,6 +159,10 @@ protected:
 
 	UUndegard_GameInstance* GameInstanceReference;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UAudioComponent* StepSoundComponent;
+
+
 public:
 	
 	UPROPERTY(BlueprintAssignable)
@@ -234,6 +239,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void GoToMainMenu();
+
+	void PlayStepSound();
 
 	UFUNCTION(BlueprintCallable)
 	EUndegard_CharacterType GetCharacterType() { return CharacterType; };
