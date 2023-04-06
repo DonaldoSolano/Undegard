@@ -17,6 +17,7 @@ class UUndegard_HealthComponent;
 class AUndegard_GameMode;
 class UUndegard_GameInstance;
 class UAudioComponent;
+class USoundCue;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUltimateUpdateSignature, float, CurrentUltimateXP, float, MaxUltimateXP);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUltimateStatusSignature, bool, bIsAvailable);
@@ -162,6 +163,18 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UAudioComponent* StepSoundComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UAudioComponent* VoiceSoundComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Audio")
+	USoundCue* DeadSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Audio")
+	USoundCue* UltimateSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Audio")
+	USoundCue* HurtSound;
+
 
 public:
 	
@@ -241,6 +254,8 @@ public:
 	void GoToMainMenu();
 
 	void PlayStepSound();
+
+	void PlayVoiceSound(USoundCue* VoiceSound);
 
 	UFUNCTION(BlueprintCallable)
 	EUndegard_CharacterType GetCharacterType() { return CharacterType; };

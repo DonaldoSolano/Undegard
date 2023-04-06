@@ -15,6 +15,7 @@
 #include "Core/Undegard_GameMode.h"
 #include "Core/Undegard_GameInstance.h"
 #include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AUndegard_Character::AUndegard_Character()
@@ -58,6 +59,9 @@ AUndegard_Character::AUndegard_Character()
 
 	StepSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("StepSoundComponent"));
 	StepSoundComponent->SetupAttachment(RootComponent);
+
+	VoiceSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("VoiceSoundComponent"));
+	VoiceSoundComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -229,8 +233,15 @@ void AUndegard_Character::MakeMeleeDamage(UPrimitiveComponent * OverlappedCompon
 
 void AUndegard_Character::OnHealthChange(UUndegard_HealthComponent * CurrentHealthComponent, AActor * DamagedActor, float Damage, const UDamageType * DamageType, AController * InstigatedBy, AActor * DamageCauser)
 {
+	if (!HealthComponent->IsDead())
+	{
+		PlayVoiceSound(HurtSound);
+	}
+
 	if (HealthComponent->IsDead() && GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
 	{
+		PlayVoiceSound(DeadSound);
+
 		if (IsValid(GameModeReference))
 		{
 			GameModeReference->GameOver(this);
@@ -274,6 +285,8 @@ void AUndegard_Character::StartUltimate()
 	{
 		BP_StartUltimate();
 		bIsUsingUltimate = true;
+
+		PlayVoiceSound(UltimateSound);
 	}
 }
 
@@ -320,6 +333,16 @@ void AUndegard_Character::GoToMainMenu()
 void AUndegard_Character::PlayStepSound()
 {
 	StepSoundComponent->Play();
+}
+
+void AUndegard_Character::PlayVoiceSound(USoundCue* VoiceSound)
+{
+	if (!IsValid(VoiceSound))
+	{
+		return;
+	}
+	VoiceSoundComponent->SetSound(VoiceSound);
+	VoiceSoundComponent->Play();
 }
 
 void AUndegard_Character::MoveForward(float value) {
