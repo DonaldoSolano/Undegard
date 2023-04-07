@@ -16,6 +16,8 @@
 #include "Undegard_Rifle.h"
 #include "Enemy/Undegard_BotSpawner.h"
 #include "Core/Undegard_GameInstance.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 AUndegard_Bot::AUndegard_Bot()
@@ -37,6 +39,9 @@ AUndegard_Bot::AUndegard_Bot()
 
 
 	HealthComponent = CreateDefaultSubobject<UUndegard_HealthComponent>(TEXT("HealthComponent"));
+
+	TimerSoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("TimerAudioComponent"));
+	TimerSoundComponent->SetupAttachment(RootComponent);
 
 	MinDistanceToTarget = 100.0f;
 
@@ -162,11 +167,14 @@ void AUndegard_Bot::SelfDestruction()
 		MySpawner->NotifyBotDead();
 	}
 
+	PlayExplotionSound();
+
 	Destroy();
 }
 
 void AUndegard_Bot::SelfDamage()
 {
+	PlayTimerSound();
 	UGameplayStatics::ApplyDamage(this,20.0f, GetInstigatorController(), nullptr, nullptr);
 }
 
@@ -214,6 +222,22 @@ bool AUndegard_Bot::TrySpawnLoot()
 	}
 
 	return true;
+}
+
+void AUndegard_Bot::PlayTimerSound()
+{
+	TimerSoundComponent->Play();
+}
+
+void AUndegard_Bot::PlayExplotionSound()
+{
+	if (!IsValid(ExplotionSound))
+	{
+		return;
+	}
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(),ExplotionSound, GetActorLocation());
+
 }
 
 // Called every frame

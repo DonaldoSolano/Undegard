@@ -15,6 +15,8 @@ class UParticleSystem;
 class AUndegard_Item;
 class AUndegard_BotSpawner;
 class UUndegard_GameInstance;
+class UAudioComponent;
+class USoundCue;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Bot : public APawn
@@ -30,6 +32,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USphereComponent* Hitbox;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UAudioComponent* TimerSoundComponent;
+
 
 protected:
 
@@ -82,6 +88,9 @@ protected:
 
 	UUndegard_GameInstance* GameInstanceReference;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Audio")
+	USoundCue* ExplotionSound;
+
 public:
 	// Sets default values for this pawn's properties
 	AUndegard_Bot();
@@ -112,6 +121,10 @@ protected:
 
 	UFUNCTION()
 	bool TrySpawnLoot();
+
+	void PlayTimerSound();
+
+	void PlayExplotionSound();
 
 public:	
 	// Called every frame
