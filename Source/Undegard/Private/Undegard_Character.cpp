@@ -238,13 +238,16 @@ void AUndegard_Character::OnHealthChange(UUndegard_HealthComponent * CurrentHeal
 		PlayVoiceSound(HurtSound);
 	}
 
-	if (HealthComponent->IsDead() && GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
+	if (HealthComponent->IsDead())
 	{
 		PlayVoiceSound(DeadSound);
 
-		if (IsValid(GameModeReference))
+		if (GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
 		{
-			GameModeReference->GameOver(this);
+			if (IsValid(GameModeReference))
+			{
+				GameModeReference->GameOver(this);
+			}
 		}
 	}
 }

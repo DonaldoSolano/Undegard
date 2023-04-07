@@ -115,7 +115,7 @@ void AUndegard_GameMode::GameOver(AUndegard_Character* Character)
 	
 	OnGameOverDelegate.Broadcast();
 
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle_BackToMainMenu, this, &AUndegard_GameMode::BackToMainMenu, 3.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle_BackToMainMenu, this, &AUndegard_GameMode::BackToMainMenu, 6.0f, false);
 
 	BP_GameOver(Character);
 }
