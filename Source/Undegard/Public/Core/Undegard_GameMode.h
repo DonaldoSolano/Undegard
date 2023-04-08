@@ -8,6 +8,7 @@
 
 class AUndegard_Character;
 class AUndegard_SpectatingCamera;
+class USoundCue;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKeyAddedSignature, FName, KeyTag);
 
@@ -35,6 +36,12 @@ protected:
 	FName MainMenuMapName;
 
 	FTimerHandle TimerHandle_BackToMainMenu;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+	USoundCue* VictoryMusic;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
+	USoundCue* GameOverMusic;
 
 public:
 
@@ -72,4 +79,6 @@ protected:
 	void SetUpSpectatingCameras();
 
 	void MoveCameraToSpectatingPoint(AUndegard_SpectatingCamera* SpectatingCamera, AUndegard_Character* Character);
+
+	void PlayGameModeMusic( USoundCue* MusicCue);
 };

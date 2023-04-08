@@ -7,6 +7,7 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "Undegard_SpectatingCamera.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 void AUndegard_GameMode::BackToMainMenu()
 {
@@ -70,6 +71,18 @@ void AUndegard_GameMode::MoveCameraToSpectatingPoint(AUndegard_SpectatingCamera 
 	}
 }
 
+void AUndegard_GameMode::PlayGameModeMusic(USoundCue* MusicCue)
+{
+	if (!IsValid(MusicCue))
+	{
+		return;
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), MusicCue);
+	}
+}
+
 AUndegard_GameMode::AUndegard_GameMode()
 {
 	MainMenuMapName = "MainMenuMap";
@@ -91,6 +104,8 @@ void AUndegard_GameMode::Victory(AUndegard_Character* Character)
 	MoveCameraToSpectatingPoint(VictoryCamera,Character);
 
 	OnVictoryDelegate.Broadcast();
+
+	PlayGameModeMusic(VictoryMusic);
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle_BackToMainMenu, this, &AUndegard_GameMode::BackToMainMenu, 3.0f, false);
 
@@ -114,6 +129,8 @@ void AUndegard_GameMode::GameOver(AUndegard_Character* Character)
 	}
 	
 	OnGameOverDelegate.Broadcast();
+
+	PlayGameModeMusic(GameOverMusic);
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle_BackToMainMenu, this, &AUndegard_GameMode::BackToMainMenu, 6.0f, false);
 
