@@ -8,16 +8,57 @@
 #include "Undegard_SpectatingCamera.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "Enemy/Undegard_Enemy.h"
 
 void AUndegard_GameMode::BackToMainMenu()
 {
 	UGameplayStatics::OpenLevel(GetWorld(), MainMenuMapName);
 }
 
+void AUndegard_GameMode::CheckAlertMode()
+{
+	bool bEnemyInAlertMode = false;
+
+	for (AUndegard_Enemy* EnemyOnLevel : LevelEnemies)
+	{
+		if (!IsValid(EnemyOnLevel))
+		{
+			continue;
+		}
+		if (EnemyOnLevel->IsAlerted())
+		{
+			bEnemyInAlertMode = true;
+			break;
+		}
+	}
+
+	if (bIsAlertMode != bEnemyInAlertMode)
+	{
+		bIsAlertMode = bEnemyInAlertMode; 
+		OnAlertModeChangeDelegate.Broadcast(bIsAlertMode);
+	}
+}
+
 void AUndegard_GameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	SetUpSpectatingCameras();
+
+	TArray<AActor*> EnemyActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUndegard_Enemy::StaticClass(), EnemyActors);
+	for (AActor* EnemyActor : EnemyActors)
+	{
+		if (!IsValid(EnemyActor))
+		{
+			continue;
+		}
+
+		AUndegard_Enemy* NewEnemy = Cast<AUndegard_Enemy>(EnemyActor);
+		if (IsValid(NewEnemy))
+		{
+			LevelEnemies.AddUnique(NewEnemy);
+		}
+	}
 }
 
 void AUndegard_GameMode::SetUpSpectatingCameras()

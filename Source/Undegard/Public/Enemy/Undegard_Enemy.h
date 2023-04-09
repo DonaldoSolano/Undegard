@@ -34,6 +34,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "UI")
 	bool bIsShowingHealthBar;
 
+	UPROPERTY(BlueprintReadOnly, Category = "AI")
+	bool bIsAlerted;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI|Navigation Path")
 	int DirectionIndex;
 
@@ -84,6 +87,10 @@ public:
 
 	void ShowHealthBar();
 	void HideHealthBar();
+
+	bool IsAlerted() { return bIsAlerted; };
+
+	void SetAlert(bool bValue);
 
 public:
 	AUndegard_Enemy();

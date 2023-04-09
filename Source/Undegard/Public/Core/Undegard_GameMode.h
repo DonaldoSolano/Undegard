@@ -9,8 +9,11 @@
 class AUndegard_Character;
 class AUndegard_SpectatingCamera;
 class USoundCue;
+class AUndegard_Enemy;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKeyAddedSignature, FName, KeyTag);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAlertModeChangeSignature, bool, bIsAlert);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameStateChange);
 
@@ -23,6 +26,10 @@ public:
 		AUndegard_GameMode();
 
 protected:
+
+	UPROPERTY(BlueprintReadOnly, Category = "Level")
+	bool bIsAlertMode;
+
 	UPROPERTY(BlueprintReadOnly, Category = "Spectating Camera")
 	AUndegard_SpectatingCamera* VictoryCamera;
 
@@ -43,6 +50,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music")
 	USoundCue* GameOverMusic;
 
+	UPROPERTY(BlueprintReadOnly, Category = "Level")
+	TArray<AUndegard_Enemy*> LevelEnemies;
+
 public:
 
 	UPROPERTY(BlueprintAssignable)
@@ -53,6 +63,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnGameStateChange OnGameOverDelegate;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAlertModeChangeSignature OnAlertModeChangeDelegate;
 
 public:
 
@@ -72,6 +85,8 @@ public:
 	void BP_GameOver(AUndegard_Character* Character);
 
 	void BackToMainMenu();
+
+	void CheckAlertMode();
 
 protected:
 	virtual void BeginPlay() override;

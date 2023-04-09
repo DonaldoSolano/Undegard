@@ -18,6 +18,8 @@ AUndegard_LevelMusic::AUndegard_LevelMusic()
 	MusicAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("MusicAudioComponent"));
 	MusicAudioComponent->SetupAttachment(RootComponent);
 
+	AlertParamName = "Alert";
+
 }
 
 // Called when the game starts or when spawned
@@ -30,12 +32,18 @@ void AUndegard_LevelMusic::BeginPlay()
 	{
 		GameModeReference->OnVictoryDelegate.AddDynamic(this, &AUndegard_LevelMusic::StopLevelMusic);
 		GameModeReference->OnGameOverDelegate.AddDynamic(this, &AUndegard_LevelMusic::StopLevelMusic);
+		GameModeReference->OnAlertModeChangeDelegate.AddDynamic(this, &AUndegard_LevelMusic::ChangeLevelMusic);
 	}
 }
 
 void AUndegard_LevelMusic::StopLevelMusic()
 {
 	MusicAudioComponent->Stop();
+}
+
+void AUndegard_LevelMusic::ChangeLevelMusic(bool bIsAlert)
+{
+	MusicAudioComponent->SetBoolParameter(AlertParamName, bIsAlert);
 }
 
 // Called every frame

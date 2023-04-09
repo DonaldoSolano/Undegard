@@ -12,6 +12,7 @@
 #include "Core/Undegard_GameInstance.h"
 #include "Components/WidgetComponent.h"
 #include "UI/Enemy/Undegard_EnemyHealthBar.h"
+#include "Core/Undegard_GameMode.h"
 
 void AUndegard_Enemy::BeginPlay()
 {
@@ -75,12 +76,16 @@ void AUndegard_Enemy::HealthChanged(UUndegard_HealthComponent * CurrentHealthCom
 
 	if (CurrentHealthComponent->IsDead())
 	{
+
+		MyAIController->DeactivateAIPerception();
 		MyAIController->UnPossess();
 
 		if (IsValid(GameInstanceReference))
 		{
 			GameInstanceReference->AddDefeatedEnemyCounter();
 		}
+
+		SetAlert(false);
 
 		//Hide enemy health bar component visibility if enemy dies.
 		HideHealthBar();
@@ -132,6 +137,15 @@ void AUndegard_Enemy::HideHealthBar()
 {
 	bIsShowingHealthBar = false;
 	EnemyHealthBar->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void AUndegard_Enemy::SetAlert(bool bValue)
+{
+	bIsAlerted = bValue;
+	if (IsValid(GameModeReference))
+	{
+		GameModeReference->CheckAlertMode();
+	}
 }
 
 AUndegard_Enemy::AUndegard_Enemy() {
