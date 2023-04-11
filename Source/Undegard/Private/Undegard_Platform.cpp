@@ -49,8 +49,8 @@ void AUndegard_Platform::Move()
 		upDirection *= -1;
 	}
 
-	FVector currentVelocity = upDirection * speed;
-	FVector newPosition = GetActorLocation() + currentVelocity;
+	const FVector currentVelocity = upDirection * speed;
+	const FVector newPosition = GetActorLocation() + currentVelocity;
 	SetActorLocation(newPosition);
 
 	if ((bIsGoingUp && GetActorLocation().Z >= maxHeight)||(!bIsGoingUp && GetActorLocation().Z <= minHeight))

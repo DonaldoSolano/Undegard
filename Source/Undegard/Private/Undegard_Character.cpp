@@ -219,8 +219,8 @@ void AUndegard_Character::MakeMeleeDamage(UPrimitiveComponent * OverlappedCompon
 
 		if (IsValid(MeleeTarget))
 		{
-			bool bPlayerAttackingEnemy = GetCharacterType() == EUndegard_CharacterType::CharacterType_Player && MeleeTarget->GetCharacterType() == EUndegard_CharacterType::CharacterType_Enemy;
-			bool bEnemyAttackingPlayer = GetCharacterType() == EUndegard_CharacterType::CharacterType_Enemy && MeleeTarget->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player;
+			const bool bPlayerAttackingEnemy = GetCharacterType() == EUndegard_CharacterType::CharacterType_Player && MeleeTarget->GetCharacterType() == EUndegard_CharacterType::CharacterType_Enemy;
+			const bool bEnemyAttackingPlayer = GetCharacterType() == EUndegard_CharacterType::CharacterType_Enemy && MeleeTarget->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player;
 
 			if (bPlayerAttackingEnemy || bEnemyAttackingPlayer)
 			{
