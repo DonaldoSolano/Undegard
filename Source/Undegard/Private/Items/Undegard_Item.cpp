@@ -5,7 +5,8 @@
 #include "Components/SphereComponent.h"
 #include "Undegard_Character.h"
 #include "Core/Undegard_GameMode.h"
-
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AUndegard_Item::AUndegard_Item()
@@ -28,6 +29,18 @@ void AUndegard_Item::BeginPlay()
 	GameModeReference = Cast<AUndegard_GameMode>(GetWorld()->GetAuthGameMode());
 }
 
+void AUndegard_Item::PlayPickupSound(USoundCue* MusicCue)
+{
+	if (!IsValid(MusicCue))
+	{
+		return;
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), MusicCue);
+	}
+}
+
 // Called every frame
 void AUndegard_Item::Tick(float DeltaTime)
 {
@@ -44,6 +57,7 @@ void AUndegard_Item::NotifyActorBeginOverlap(AActor * OtherActor)
 		AUndegard_Character* OverlappedCharacter = Cast<AUndegard_Character>(OtherActor);
 		if (IsValid(OverlappedCharacter) && OverlappedCharacter->GetCharacterType() == EUndegard_CharacterType::CharacterType_Player)
 		{
+			PlayPickupSound(ItemPickupSoundCue);
 			Pickup(OverlappedCharacter);
 		}
 	}

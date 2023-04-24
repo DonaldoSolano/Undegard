@@ -2,6 +2,8 @@
 
 
 #include "UI/MainMenu/Undegard_MainMenuButton.h"
+#include "Sound/SoundCue.h"
+#include "Kismet/GameplayStatics.h"
 
 UUndegard_MainMenuButton::UUndegard_MainMenuButton() {
 	CheckFocusRate = 0.1f;
@@ -31,4 +33,28 @@ void UUndegard_MainMenuButton::CheckFocus()
 void UUndegard_MainMenuButton::SetButtonStyle(EUndegard_ButtonStyleType NewStyleType)
 {
 	BP_SetButtonStyle(NewStyleType);
+}
+
+void UUndegard_MainMenuButton::PlayButtonFocusSound(USoundCue* FocusSoundCue)
+{
+	if (!IsValid(FocusSoundCue))
+	{
+		return;
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), FocusSoundCue);
+	}
+}
+
+void UUndegard_MainMenuButton::PlaySelectedButtonSound(USoundCue* SelectedSoundCue)
+{
+	if (!IsValid(SelectedSoundCue))
+	{
+		return;
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), SelectedSoundCue);
+	}
 }

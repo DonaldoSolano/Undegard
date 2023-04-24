@@ -6,6 +6,8 @@
 #include "Components/Button.h"
 #include "Undegard_MainMenuButton.generated.h"
 
+class USoundCue;
+
 UENUM(Blueprintable)
 enum class EUndegard_ButtonStyleType : uint8
 {
@@ -29,6 +31,13 @@ protected:
 
 	FTimerHandle TimerHandle_CheckFocus;
 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Sound|Focus sound")
+	USoundCue* ButtonFocusSoundCue;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI Sound|Select sound")
+	USoundCue* SelectButtonSoundCue;
+
 protected:
 
 
@@ -41,4 +50,9 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Button Style Type")
 	void BP_SetButtonStyle(EUndegard_ButtonStyleType NewStyleType);
+
+	void PlayButtonFocusSound(USoundCue* FocusSoundCue);
+
+	UFUNCTION(BlueprintCallable, Category = "UI Sound|Select sound")
+	void PlaySelectedButtonSound(USoundCue* SelectedSoundCue);
 };
