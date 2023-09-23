@@ -14,6 +14,7 @@ class AUndegard_Item;
 class AUndegard_AIController;
 class UWidgetComponent;
 class UUndegard_EnemyHealthBar;
+class UCapsuleComponent;
 
 UCLASS()
 class UNDEGARD_API AUndegard_Enemy : public AUndegard_Character
@@ -51,6 +52,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Loot System")
 	TSubclassOf<AUndegard_Item> LootItemClass;
+
+	UCapsuleComponent* EnemyCapsuleComponent;
 
 	UPROPERTY(BlueprintReadOnly, Category = "AI|Controller")
 	AUndegard_AIController* MyAIController;

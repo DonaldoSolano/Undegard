@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 #include "UI/Enemy/Undegard_EnemyHealthBar.h"
 #include "Core/Undegard_GameMode.h"
+#include "Components/CapsuleComponent.h"
 
 void AUndegard_Enemy::BeginPlay()
 {
@@ -31,6 +32,8 @@ void AUndegard_Enemy::BeginPlay()
 			HideHealthBar();
 		}
 	}
+
+	EnemyCapsuleComponent = GetCapsuleComponent();
 }
 
 void AUndegard_Enemy::GiveXP(AActor * DamageCauser)
@@ -79,6 +82,8 @@ void AUndegard_Enemy::HealthChanged(UUndegard_HealthComponent * CurrentHealthCom
 
 		MyAIController->DeactivateAIPerception();
 		MyAIController->UnPossess();
+		
+		EnemyCapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		if (IsValid(GameInstanceReference))
 		{
