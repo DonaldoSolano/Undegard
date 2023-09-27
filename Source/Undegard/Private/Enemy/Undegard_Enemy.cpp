@@ -82,7 +82,9 @@ void AUndegard_Enemy::HealthChanged(UUndegard_HealthComponent * CurrentHealthCom
 
 		MyAIController->DeactivateAIPerception();
 		MyAIController->UnPossess();
+		MyAIController->Destroy();
 		
+		EnemyCapsuleComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 		EnemyCapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		if (IsValid(GameInstanceReference))
